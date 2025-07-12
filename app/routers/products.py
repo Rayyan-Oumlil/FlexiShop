@@ -17,8 +17,14 @@ def get_db():
 def get_products(db: Session = Depends(get_db)):
     return db.query(Product).all()
 
+from app.core.dependencies import get_current_admin
+
 @router.post("/", response_model=ProductOut)
-def create_product(product: ProductCreate, db: Session = Depends(get_db)):
+def create_product(
+    product: ProductCreate,
+    db: Session = Depends(get_db),
+    current_admin = Depends(get_current_admin)  # ✅ token obligatoire
+):
     db_product = Product(**product.dict())
     db.add(db_product)
     db.commit()
