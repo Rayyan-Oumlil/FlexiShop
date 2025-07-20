@@ -23,8 +23,13 @@ export default function CartPage() {
     getCart()
       .then((data) => {
         setItems(data.items || [])
+        setError("")
       })
-      .catch(() => setError("Erreur chargement du panier"))
+      .catch((err) => {
+        setError("Erreur chargement du panier")
+        setItems([])
+        console.error("Cart load error:", err)
+      })
       .finally(() => setLoading(false))
   }
 
@@ -47,37 +52,41 @@ export default function CartPage() {
   )
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="w-full px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Votre panier</h1>
 
+      {error && (
+        <div className="text-red-600 font-bold mb-4">{error}</div>
+      )}
       {loading && <p>Chargement...</p>}
-      {error && <p className="text-red-500">{error}</p>}
 
-      {items.length === 0 && !loading ? (
+      {items.length === 0 && !loading && !error ? (
         <p className="text-muted-foreground">Votre panier est vide.</p>
-      ) : (
+      ) : !error && (
         <div className="space-y-6">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center gap-4 border p-4 rounded-lg bg-white dark:bg-zinc-900"
-            >
-              <img
-                src={item.product.image_url || "/vite.svg"}
-                alt={item.product.name}
-                className="w-20 h-20 object-cover rounded"
-              />
-              <div className="flex-1">
-                <h2 className="font-semibold">{item.product.name}</h2>
-                <p className="text-sm text-muted-foreground">
-                  {item.quantity} x {item.product.price} €
-                </p>
+          {items.map((item) =>
+            item.product ? (
+              <div
+                key={item.id}
+                className="flex items-center gap-4 border p-4 rounded-lg bg-white dark:bg-zinc-900"
+              >
+                <img
+                  src={item.product.image_url || "/vite.svg"}
+                  alt={item.product.name}
+                  className="w-20 h-20 object-cover rounded"
+                />
+                <div className="flex-1">
+                  <h2 className="font-semibold">{item.product.name}</h2>
+                  <p className="text-sm text-muted-foreground">
+                    {item.quantity} x {item.product.price} €
+                  </p>
+                </div>
+                <div className="font-bold">
+                  {(item.quantity * item.product.price).toFixed(2)} €
+                </div>
               </div>
-              <div className="font-bold">
-                {(item.quantity * item.product.price).toFixed(2)} €
-              </div>
-            </div>
-          ))}
+            ) : null
+          )}
 
           <div className="flex justify-between items-center mt-6 border-t pt-4">
             <p className="text-xl font-bold">Total :</p>

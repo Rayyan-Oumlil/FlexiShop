@@ -13,7 +13,7 @@ export async function addToCart(productId: number, quantity = 1) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}` // ← ici
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({ product_id: productId, quantity })
   })
