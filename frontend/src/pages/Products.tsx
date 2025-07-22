@@ -22,7 +22,56 @@ export default function ProductsPage() {
         if (!res.ok) throw new Error("Erreur chargement des produits")
         return res.json()
       })
-      .then(setProducts)
+      .then((data) => {
+        if (data.length === 0) {
+          // Ajout automatique des produits vedettes si la liste est vide
+          const featured = [
+            {
+              name: "Laptop Pro 15\"",
+              description: "Puissant, léger, parfait pour le travail et le loisir.",
+              price: 999,
+              image_url: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+              name: "Smartphone X",
+              description: "Écran OLED, autonomie record, design élégant.",
+              price: 699,
+              image_url: "https://images.unsplash.com/photo-1512499617640-c2f999098c67?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+              name: "Sneakers Air",
+              description: "Confort ultime, look moderne, édition limitée.",
+              price: 129,
+              image_url: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+              name: "Laptop Air Pro",
+              description: "Ultraportable, autonomie exceptionnelle, design premium.",
+              price: 1199,
+              image_url: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80"
+            },
+            {
+              name: "Smartphone X2",
+              description: "Double SIM, photo pro, rapidité inégalée.",
+              price: 799,
+              image_url: "https://images.unsplash.com/photo-1512499617640-c2f999098c67?auto=format&fit=crop&w=400&q=80"
+            }
+          ];
+          const token = localStorage.getItem("token");
+          Promise.all(featured.map(prod =>
+            fetch("http://localhost:8000/api/products/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(prod)
+            })
+          )).then(() => window.location.reload());
+        } else {
+          setProducts(data);
+        }
+      })
       .catch((err) => setError(err.message))
   }, [])
 

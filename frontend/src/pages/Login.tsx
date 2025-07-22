@@ -17,7 +17,7 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    fetch("http://localhost:8000/auth/login", {
+    fetch("http://localhost:8000/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -49,7 +49,7 @@ export default function LoginPage() {
     setSignupLoading(true)
     setSignupSuccess("")
     setSignupError("")
-    fetch("http://localhost:8000/users/register", {
+    fetch("http://localhost:8000/api/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

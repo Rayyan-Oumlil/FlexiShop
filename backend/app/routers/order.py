@@ -68,6 +68,7 @@ def get_order_history(
             "items": [
                 {
                     "product_id": oi.product_id,
+                    "product_name": db.query(Product.name).filter(Product.id == oi.product_id).scalar(),
                     "quantity": oi.quantity,
                     "price": oi.price
                 } for oi in order.items
