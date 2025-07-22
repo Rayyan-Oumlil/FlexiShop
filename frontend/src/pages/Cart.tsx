@@ -17,6 +17,13 @@ export default function CartPage() {
   const [items, setItems] = useState<CartItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
+  const [orderHistory, setOrderHistory] = useState<any[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState<string | null>(null);
 
   const loadCart = () => {
     setLoading(true)
@@ -42,6 +49,50 @@ export default function CartPage() {
       .catch(() => alert("Erreur vidage ❌"))
   }
 
+  const handleCheckout = async () => {
+    setCheckoutLoading(true);
+    setCheckoutMessage(null);
+    setCheckoutError(null);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:8000/api/orders/", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Erreur lors du checkout");
+      setCheckoutMessage("Commande validée ! ✅");
+      clearCart();
+      loadCart();
+      await fetchOrderHistory();
+    } catch (err: any) {
+      setCheckoutError(err.message || "Erreur lors du checkout");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
+  const fetchOrderHistory = async () => {
+    setHistoryLoading(true);
+    setHistoryError(null);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:8000/api/orders/history", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Erreur lors du chargement de l'historique");
+      setOrderHistory(data);
+      setShowHistory(true);
+    } catch (err: any) {
+      setHistoryError(err.message || "Erreur lors du chargement de l'historique");
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadCart()
   }, [])
@@ -52,7 +103,7 @@ export default function CartPage() {
   )
 
   return (
-    <div className="w-full px-4 py-8">
+    <div className="w-full px-4 py-8 flex-1 flex flex-col">
       <h1 className="text-3xl font-bold mb-6">Votre panier</h1>
 
       {error && (
@@ -93,11 +144,64 @@ export default function CartPage() {
             <p className="text-xl font-bold">{total.toFixed(2)} €</p>
           </div>
 
-          <Button variant="destructive" className="w-full" onClick={handleClear}>
-            Vider le panier
-          </Button>
+          <div className="flex flex-col gap-3 mt-8">
+            <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-bold" onClick={handleClear} disabled={loading || items.length === 0}>
+              Vider le panier
+            </Button>
+            <Button className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold" onClick={handleCheckout} disabled={checkoutLoading || items.length === 0 || loading}>
+              {checkoutLoading ? "Processing..." : "Checkout"}
+            </Button>
+            {checkoutMessage && <p className="text-green-600 text-center mt-2">{checkoutMessage}</p>}
+            {checkoutError && <p className="text-red-600 text-center mt-2">{checkoutError}</p>}
+          </div>
         </div>
       )}
+
+      {/* BOUTON ET HISTORIQUE TOUJOURS AFFICHÉS */}
+      <div className="flex flex-col gap-3 mt-8">
+        <Button className="w-full bg-pink-700 hover:bg-pink-800 text-white font-bold" onClick={fetchOrderHistory} disabled={historyLoading}>
+          {historyLoading ? "Chargement..." : "Voir l'historique des commandes"}
+        </Button>
+        {historyError && <p className="text-red-600 text-center mt-2">{historyError}</p>}
+        {showHistory && (
+          <div className="mt-8">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-pink-600">Historique des commandes</h2>
+              <Button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold px-4 py-1 rounded" onClick={() => setShowHistory(false)}>
+                Fermer
+              </Button>
+            </div>
+            {orderHistory.length === 0 ? (
+              <p className="text-gray-500">Aucune commande trouvée.</p>
+            ) : (
+              <div className="space-y-6">
+                {orderHistory.map((order, idx) => (
+                  <div key={order.id} className="bg-white rounded-xl shadow p-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-semibold">Commande #{idx + 1}</span>
+                      <span className="text-gray-500 text-sm">{new Date(order.created_at).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                    </div>
+                    <div className="mb-2">
+                      <span className="font-bold">Total: </span>
+                      <span>{order.total_price.toFixed(2)} €</span>
+                    </div>
+                    <div>
+                      <span className="font-semibold">Articles:</span>
+                      <ul className="list-disc ml-6 mt-1">
+                        {order.items.map((item: any, idx: number) => (
+                          <li key={idx} className="text-gray-700">
+                            {item.product_name ? item.product_name : `Produit #${item.product_id}`} — {item.quantity} × {item.price.toFixed(2)} €
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
