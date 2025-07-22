@@ -17,7 +17,7 @@ export default function ProductsPage() {
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:8000/products")
+    fetch("http://localhost:8000/api/products")
       .then((res) => {
         if (!res.ok) throw new Error("Erreur chargement des produits")
         return res.json()

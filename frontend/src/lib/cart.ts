@@ -9,7 +9,7 @@ function getToken() {
 export async function addToCart(productId: number, quantity = 1) {
   const token = getToken()
 
-  const res = await fetch("http://localhost:8000/cart/add", {
+  const res = await fetch("http://localhost:8000/api/cart/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export async function addToCart(productId: number, quantity = 1) {
 }
 
 export async function getCart() {
-  const res = await fetch(`${API_URL}/cart`, {
+  const res = await fetch(`${API_URL}/api/cart`, {
     headers: {
       Authorization: `Bearer ${getToken()}`
     }
@@ -39,7 +39,7 @@ export async function getCart() {
 }
 
 export async function clearCart() {
-  const res = await fetch(`${API_URL}/cart/clear`, {
+  const res = await fetch(`${API_URL}/api/cart/clear`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${getToken()}`
