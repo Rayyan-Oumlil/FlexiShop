@@ -47,26 +47,29 @@ export default function Home() {
       <section className="w-full max-w-6xl mx-auto mb-16">
         <h2 className="text-3xl font-extrabold text-pink-600 mb-8">Nos meilleures ventes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          {/* Sony Alpha 7 IV */}
           <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-yellow-100 hover:scale-105 transition-transform">
-            <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80" alt="Laptop" className="w-32 h-32 object-cover rounded-xl mb-4" />
-            <h3 className="font-bold text-lg mb-2">Laptop Pro 15"</h3>
-            <p className="text-pink-500 font-bold text-xl mb-2">999 €</p>
-            <p className="text-gray-500 text-sm mb-2">Puissant, léger, parfait pour le travail et le loisir.</p>
-            <Link to="/products" className="text-pink-600 hover:underline font-semibold">Voir le produit</Link>
+            <img src="https://d3d71ba2asa5oz.cloudfront.net/12008909/images/sona7m42870bk-uu_1.png" alt="Sony Alpha 7 IV" className="w-32 h-32 object-cover rounded-xl mb-4" />
+            <h3 className="font-bold text-lg mb-2">Sony Alpha 7 IV</h3>
+            <p className="text-pink-500 font-bold text-xl mb-2">1499 €</p>
+            <p className="text-gray-500 text-sm mb-2">4K professional camera, interchangeable lenses, perfect for creators.</p>
+            <Link to="/products" className="text-pink-600 hover:underline font-semibold">View product</Link>
           </div>
+          {/* PlayStation 5 */}
           <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-yellow-100 hover:scale-105 transition-transform">
-            <img src="https://images.unsplash.com/photo-1512499617640-c2f999098c67?auto=format&fit=crop&w=400&q=80" alt="Smartphone" className="w-32 h-32 object-cover rounded-xl mb-4" />
-            <h3 className="font-bold text-lg mb-2">Smartphone X</h3>
-            <p className="text-pink-500 font-bold text-xl mb-2">699 €</p>
-            <p className="text-gray-500 text-sm mb-2">Écran OLED, autonomie record, design élégant.</p>
-            <Link to="/products" className="text-pink-600 hover:underline font-semibold">Voir le produit</Link>
+            <img src="https://1pc.co.il/images/thumbs/0168383_-playstation-5-pro-digital-edition_510.jpeg" alt="PlayStation 5" className="w-32 h-32 object-cover rounded-xl mb-4" />
+            <h3 className="font-bold text-lg mb-2">PlayStation 5</h3>
+            <p className="text-pink-500 font-bold text-xl mb-2">549 €</p>
+            <p className="text-gray-500 text-sm mb-2">Sony’s next-generation gaming console featuring ultra-fast SSD, ray tracing support, and the immersive DualSense controller.</p>
+            <Link to="/products" className="text-pink-600 hover:underline font-semibold">View product</Link>
           </div>
+          {/* MacBook Pro */}
           <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-yellow-100 hover:scale-105 transition-transform">
-            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="Sneakers" className="w-32 h-32 object-cover rounded-xl mb-4" />
-            <h3 className="font-bold text-lg mb-2">Sneakers Air</h3>
-            <p className="text-pink-500 font-bold text-xl mb-2">129 €</p>
-            <p className="text-gray-500 text-sm mb-2">Confort ultime, look moderne, édition limitée.</p>
-            <Link to="/products" className="text-pink-600 hover:underline font-semibold">Voir le produit</Link>
+            <img src="https://i.ebayimg.com/images/g/RcUAAOSw5OtnYsCj/s-l1600.webp" alt="MacBook Pro" className="w-32 h-32 object-cover rounded-xl mb-4" />
+            <h3 className="font-bold text-lg mb-2">MacBook Pro</h3>
+            <p className="text-pink-500 font-bold text-xl mb-2">1199 €</p>
+            <p className="text-gray-500 text-sm mb-2">Ultraportable, exceptional battery life, premium design.</p>
+            <Link to="/products" className="text-pink-600 hover:underline font-semibold">View product</Link>
           </div>
         </div>
       </section>
@@ -78,8 +81,10 @@ export default function Home() {
           <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft" className="h-10" />
           <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike" className="h-10" />
           <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" className="h-10" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Apple_logo_black.svg" alt="Apple" className="h-10" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Adidas_Logo.svg" alt="Adidas" className="h-10" />
+          {/* Apple logo with provided URL, no background */}
+          <img src="https://cdn.freebiesupply.com/images/large/2x/apple-logo-transparent.png" alt="Apple" className="h-10" style={{ background: 'transparent' }} />
+          {/* Adidas logo with provided URL, no background */}
+          <img src="https://www.freepnglogos.com/uploads/adidas-logo-png-hd-17.png" alt="Adidas" className="h-10" style={{ background: 'transparent' }} />
         </div>
       </section>
 
@@ -178,37 +183,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* FOOTER ENRICHI */}
-      <footer className="w-full bg-pink-600 text-white py-8 mt-12 flex flex-col items-center">
-        <div className="flex flex-col md:flex-row justify-between w-full max-w-6xl px-4 gap-8">
-          <div className="flex-1 text-left">
-            <h3 className="font-bold text-xl mb-2">MyStore</h3>
-            <p className="text-pink-100 mb-2">Votre boutique de confiance pour la tech, la mode et plus encore.</p>
-            <div className="flex gap-4 mt-4">
-              <a href="#" className="hover:text-yellow-200"><FaFacebook size={24} /></a>
-              <a href="#" className="hover:text-yellow-200"><FaInstagram size={24} /></a>
-              <a href="#" className="hover:text-yellow-200"><FaTwitter size={24} /></a>
-            </div>
-          </div>
-          <div className="flex-1 text-left">
-            <h4 className="font-semibold mb-2">Liens utiles</h4>
-            <ul className="space-y-1">
-              <li><Link to="/products" className="hover:underline">Produits</Link></li>
-              <li><Link to="/cart" className="hover:underline">Panier</Link></li>
-              <li><Link to="/faq" className="hover:underline">FAQ</Link></li>
-              <li><Link to="/about" className="hover:underline">À propos</Link></li>
-              <li><Link to="/report-problem" className="hover:underline">Signaler un problème</Link></li>
-            </ul>
-          </div>
-          <div className="flex-1 text-left">
-            <h4 className="font-semibold mb-2">Contact</h4>
-            <p className="mb-1">contact@mystore.com</p>
-            <p>+33 1 23 45 67 89</p>
-          </div>
-        </div>
-        <div className="mt-8 text-pink-100 text-sm">&copy; {new Date().getFullYear()} MyStore. Tous droits réservés.</div>
-      </footer>
     </div>
   );
 } 

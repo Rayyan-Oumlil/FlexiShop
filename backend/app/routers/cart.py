@@ -9,6 +9,15 @@ from app.core.dependencies import get_current_user
 from app.schemas.cart import CartItemCreate, CartOut
 from app.schemas.cart import CartItemUpdate  # 👈 ajoute cette ligne
 
+# --- Stripe Payment Integration ---
+import os
+import stripe
+from dotenv import load_dotenv
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
+load_dotenv()
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 router = APIRouter(prefix="/cart", tags=["Cart"])
 
@@ -123,3 +132,19 @@ def get_cart_total(
             total_price += item.quantity * item.product.price
 
     return {"total_price": round(total_price, 2)}
+
+@router.post("/payment/create-checkout-session")
+async def create_checkout_session(request: Request):
+    data = await request.json()
+    # data["items"] doit être une liste d'objets {name, amount, quantity}
+    try:
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=data["items"],
+            mode="payment",
+            success_url="http://localhost:5173/success",
+            cancel_url="http://localhost:5173/cancel",
+        )
+        return JSONResponse({"url": session.url})
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=400)

@@ -24,6 +24,8 @@ export default function CartPage() {
   const [orderHistory, setOrderHistory] = useState<any[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [historyError, setHistoryError] = useState<string | null>(null);
+  const [stripeLoading, setStripeLoading] = useState(false);
+  const [stripeError, setStripeError] = useState<string | null>(null);
 
   const loadCart = () => {
     setLoading(true)
@@ -74,6 +76,45 @@ export default function CartPage() {
     }
   };
 
+  const handleStripeCheckout = async () => {
+    setStripeLoading(true);
+    setStripeError(null);
+    try {
+      // Stripe attend amount en CENTIMES !
+      const lineItems = items.map(item => ({
+        price_data: {
+          currency: "eur",
+          product_data: { name: item.product.name },
+          unit_amount: Math.round(item.product.price * 100),
+        },
+        quantity: item.quantity,
+      }));
+      // Ajoute la livraison comme un item séparé
+      if (items.length > 0) {
+        lineItems.push({
+          price_data: {
+            currency: "eur",
+            product_data: { name: "Livraison internationale" },
+            unit_amount: SHIPPING_FEE * 100,
+          },
+          quantity: 1,
+        });
+      }
+      const res = await fetch("http://localhost:8000/api/cart/payment/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: lineItems })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) throw new Error(data.error || "Erreur Stripe");
+      window.location.href = data.url;
+    } catch (err: any) {
+      setStripeError(err.message || "Erreur Stripe");
+    } finally {
+      setStripeLoading(false);
+    }
+  };
+
   const fetchOrderHistory = async () => {
     setHistoryLoading(true);
     setHistoryError(null);
@@ -97,10 +138,13 @@ export default function CartPage() {
     loadCart()
   }, [])
 
+  // Ajoute le prix de livraison international (ex: 20€)
+  const SHIPPING_FEE = 20;
   const total = items.reduce(
     (acc, item) => acc + item.quantity * item.product.price,
     0
-  )
+  );
+  const totalWithShipping = total + (items.length > 0 ? SHIPPING_FEE : 0);
 
   return (
     <div className="w-full px-4 py-8 flex-1 flex flex-col">
@@ -138,21 +182,23 @@ export default function CartPage() {
               </div>
             ) : null
           )}
-
+          {/* Affiche la livraison */}
+          {items.length > 0 && (
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-base">Livraison internationale</span>
+              <span className="font-bold">{SHIPPING_FEE.toFixed(2)} €</span>
+            </div>
+          )}
           <div className="flex justify-between items-center mt-6 border-t pt-4">
             <p className="text-xl font-bold">Total :</p>
-            <p className="text-xl font-bold">{total.toFixed(2)} €</p>
+            <p className="text-xl font-bold">{totalWithShipping.toFixed(2)} €</p>
           </div>
 
           <div className="flex flex-col gap-3 mt-8">
-            <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-bold" onClick={handleClear} disabled={loading || items.length === 0}>
-              Vider le panier
+            <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold" onClick={handleStripeCheckout} disabled={stripeLoading || items.length === 0}>
+              {stripeLoading ? "Redirection..." : "Checkout"}
             </Button>
-            <Button className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold" onClick={handleCheckout} disabled={checkoutLoading || items.length === 0 || loading}>
-              {checkoutLoading ? "Processing..." : "Checkout"}
-            </Button>
-            {checkoutMessage && <p className="text-green-600 text-center mt-2">{checkoutMessage}</p>}
-            {checkoutError && <p className="text-red-600 text-center mt-2">{checkoutError}</p>}
+            {stripeError && <p className="text-red-600 text-center mt-2">{stripeError}</p>}
           </div>
         </div>
       )}
