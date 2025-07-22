@@ -14,7 +14,7 @@ type Product = {
 
 async function deleteProduct(productId: number) {
   const token = localStorage.getItem("token")
-  const res = await fetch(`http://localhost:8000/products/${productId}`, {
+  const res = await fetch(`http://localhost:8000/api/products/${productId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`

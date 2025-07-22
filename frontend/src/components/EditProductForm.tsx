@@ -16,7 +16,7 @@ export default function EditProductForm({ product, onProductUpdated, onClose }: 
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`http://localhost:8000/products/${product.id}`, {
+      const res = await fetch(`http://localhost:8000/api/products/${product.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
