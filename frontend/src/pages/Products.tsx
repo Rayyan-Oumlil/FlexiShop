@@ -15,6 +15,10 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [error, setError] = useState("")
   const [showForm, setShowForm] = useState(false);
+  const [search, setSearch] = useState("");
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
+  const [sort, setSort] = useState("none");
 
   useEffect(() => {
     fetch("http://localhost:8000/api/products")
@@ -75,9 +79,56 @@ export default function ProductsPage() {
       .catch((err) => setError(err.message))
   }, [])
 
+  let filteredProducts = products.filter(p =>
+    p.name.toLowerCase().includes(search.toLowerCase()) ||
+    p.description.toLowerCase().includes(search.toLowerCase())
+  );
+  if (priceMin) filteredProducts = filteredProducts.filter(p => p.price >= Number(priceMin));
+  if (priceMax) filteredProducts = filteredProducts.filter(p => p.price <= Number(priceMax));
+  if (sort === "price-asc") filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
+  if (sort === "price-desc") filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
+  if (sort === "name") filteredProducts = [...filteredProducts].sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div className="w-full px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Nos produits</h1>
+
+      {/* Search, filters, and sort */}
+      <div className="mb-6 flex flex-col md:flex-row md:items-end gap-4 max-w-3xl mx-auto">
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Rechercher un produit..."
+          className="flex-1 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-200 text-lg shadow"
+        />
+        <input
+          type="number"
+          value={priceMin}
+          onChange={e => setPriceMin(e.target.value)}
+          placeholder="Prix min"
+          className="w-28 px-3 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-200 text-lg shadow"
+          min={0}
+        />
+        <input
+          type="number"
+          value={priceMax}
+          onChange={e => setPriceMax(e.target.value)}
+          placeholder="Prix max"
+          className="w-28 px-3 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-200 text-lg shadow"
+          min={0}
+        />
+        <select
+          value={sort}
+          onChange={e => setSort(e.target.value)}
+          className="w-40 px-3 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-200 text-lg shadow"
+        >
+          <option value="none">Tri</option>
+          <option value="price-asc">Prix croissant</option>
+          <option value="price-desc">Prix décroissant</option>
+          <option value="name">Nom</option>
+        </select>
+      </div>
 
       {isAdmin() && (
         <button
@@ -100,7 +151,7 @@ export default function ProductsPage() {
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <ProductCard
             key={product.id}
             product={product}
