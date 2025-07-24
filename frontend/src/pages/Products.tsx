@@ -29,50 +29,8 @@ export default function ProductsPage() {
       })
       .then((data) => {
         if (data.length === 0) {
-          // Ajout automatique des produits vedettes si la liste est vide
-          const featured = [
-            {
-              name: "Laptop Pro 15\"",
-              description: "Puissant, léger, parfait pour le travail et le loisir.",
-              price: 999,
-              image_url: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80"
-            },
-            {
-              name: "Smartphone X",
-              description: "Écran OLED, autonomie record, design élégant.",
-              price: 699,
-              image_url: "https://images.unsplash.com/photo-1512499617640-c2f999098c67?auto=format&fit=crop&w=400&q=80"
-            },
-            {
-              name: "Sneakers Air",
-              description: "Confort ultime, look moderne, édition limitée.",
-              price: 129,
-              image_url: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80"
-            },
-            {
-              name: "Laptop Air Pro",
-              description: "Ultraportable, autonomie exceptionnelle, design premium.",
-              price: 1199,
-              image_url: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80"
-            },
-            {
-              name: "Smartphone X2",
-              description: "Double SIM, photo pro, rapidité inégalée.",
-              price: 799,
-              image_url: "https://images.unsplash.com/photo-1512499617640-c2f999098c67?auto=format&fit=crop&w=400&q=80"
-            }
-          ];
-          const token = localStorage.getItem("token");
-          Promise.all(featured.map(prod =>
-            fetch(`${API_URL}/api/products/`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify(prod)
-            })
-          )).then(() => window.location.reload());
+          setProducts([]);
+          // Optionnel : affiche un message "Aucun produit" ou propose d'ajouter si admin
         } else {
           setProducts(data);
         }
@@ -150,6 +108,23 @@ export default function ProductsPage() {
       )}
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
+
+      {filteredProducts.length === 0 && (
+        <div className="text-center text-gray-500 my-8">
+          Aucun produit disponible.
+          {isAdmin() && (
+            <>
+              <br />
+              <button
+                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                onClick={() => setShowForm(true)}
+              >
+                Ajouter un produit
+              </button>
+            </>
+          )}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
         {filteredProducts.map((product) => (
