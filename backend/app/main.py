@@ -16,9 +16,10 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",                # pour le dev local
-        "https://ton-projet.vercel.app",        # ton URL Vercel (remplace par la tienne)
-        "https://flexishop.my"                  # ton domaine custom si tu l’utilises
+        "http://localhost:5173",                  # Dev local
+        "https://flexishop.my",                   # Ton domaine custom
+        "https://flexi-shop-two.vercel.app",      # Ton frontend Vercel
+        "https://flexishop.onrender.com"          # (optionnel, accès direct backend)
     ],
     allow_credentials=True,
     allow_methods=["*"],
