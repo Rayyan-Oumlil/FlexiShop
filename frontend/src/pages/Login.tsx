@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Input } from "../components/ui/input"
 import { Button } from "../components/ui/button"
-import Layout from "../components/Layout"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -17,7 +16,7 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    fetch("http://localhost:8000/api/auth/login", {
+    fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -49,7 +48,7 @@ export default function LoginPage() {
     setSignupLoading(true)
     setSignupSuccess("")
     setSignupError("")
-    fetch("http://localhost:8000/api/users/register", {
+    fetch("/api/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -78,7 +77,7 @@ export default function LoginPage() {
         {showSignup ? (
           <>
             <h1 className="text-3xl font-extrabold text-blue-600 text-center mb-2">Sign up</h1>
-            <p className="text-center text-gray-500 mb-6">Create your account to start shopping on MyStore.</p>
+            <p className="text-center text-gray-500 mb-6">Create your account to start shopping on FlexiShop.</p>
             <form className="space-y-6" onSubmit={handleSignup}>
               <div>
                 <label className="block text-base font-medium mb-2 text-gray-700">Email</label>
@@ -122,7 +121,7 @@ export default function LoginPage() {
         ) : (
           <>
             <h1 className="text-3xl font-extrabold text-blue-600 text-center mb-2">Login</h1>
-            <p className="text-center text-gray-500 mb-6">Welcome to MyStore! Log in to access your account.</p>
+            <p className="text-center text-gray-500 mb-6">Welcome to FlexiShop! Log in to access your account.</p>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-base font-medium mb-2 text-gray-700">Email</label>

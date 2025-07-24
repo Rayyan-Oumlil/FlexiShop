@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const faqs = [
@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     question: "How do I contact customer support?",
-    answer: "You can reach us via the Contact Us page, by email at contact@mystore.com, or by phone at +1 555 123 4567."
+    answer: "You can reach us via the Contact Us page, by email at contact@flexishop.com, or by phone at +1 555 123 4567."
   },
   {
     question: "Is my personal information safe?",

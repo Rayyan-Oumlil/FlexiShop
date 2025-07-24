@@ -1,11 +1,9 @@
-import React from "react";
-
 export default function AboutUs() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-4">
       <h1 className="text-4xl font-extrabold text-pink-600 mb-6">About Us</h1>
       <p className="text-lg text-gray-700 mb-8">
-        MyStore was founded with a simple mission: to bring the best of tech, fashion, and lifestyle products to everyone, everywhere. We believe in quality, speed, and customer happiness.
+        FlexiShop was founded with a simple mission: to bring the best of tech, fashion, and lifestyle products to everyone, everywhere. We believe in quality, speed, and customer happiness.
       </p>
       <div className="mb-10">
         <h2 className="text-2xl font-bold text-pink-500 mb-3">Our Story</h2>

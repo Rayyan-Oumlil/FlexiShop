@@ -1,5 +1,3 @@
-import React from "react";
-
 const partners = [
   {
     name: "Microsoft",
@@ -48,7 +46,7 @@ export default function Partner() {
       </div>
       <div className="text-center mt-20">
         <h2 className="text-xl font-bold text-pink-500 mb-6">Want to partner with us?</h2>
-        <a href="mailto:partners@mystore.com" className="bg-black hover:bg-zinc-800 text-white font-bold px-8 py-3 rounded-full transition">Contact our partnership team</a>
+        <a href="mailto:partners@flexishop.com" className="bg-black hover:bg-zinc-800 text-white font-bold px-8 py-3 rounded-full transition">Contact our partnership team</a>
       </div>
     </div>
   );

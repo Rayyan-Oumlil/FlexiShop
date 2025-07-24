@@ -1,15 +1,13 @@
-const API_URL = "http://localhost:8000"
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 function getToken() {
   return localStorage.getItem("token")
 }
 
-
-
 export async function addToCart(productId: number, quantity = 1) {
   const token = getToken()
 
-  const res = await fetch("http://localhost:8000/api/cart/add", {
+  const res = await fetch(`${API_URL}/api/cart/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -29,10 +27,14 @@ export async function addToCart(productId: number, quantity = 1) {
 }
 
 export async function getCart() {
+  const token = getToken();
+  const headers: Record<string, string> = token
+    ? { Authorization: `Bearer ${token}` }
+    : {};
+  console.log("[getCart] Token utilisé:", token);
+  console.log("[getCart] Headers envoyés:", headers);
   const res = await fetch(`${API_URL}/api/cart`, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`
-    }
+    headers
   })
   if (!res.ok) throw new Error("Impossible de charger le panier")
   return res.json()

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function ContactUs() {
   const [submitted, setSubmitted] = useState(false);
@@ -11,7 +11,7 @@ export default function ContactUs() {
       </p>
       <div className="mb-8">
         <h2 className="text-xl font-bold text-pink-500 mb-2">Contact Information</h2>
-        <p className="text-gray-700 mb-1">Email: <a href="mailto:contact@mystore.com" className="text-pink-600 hover:underline">contact@mystore.com</a></p>
+        <p className="text-gray-700 mb-1">Email: <a href="mailto:contact@flexishop.com" className="text-pink-600 hover:underline">contact@flexishop.com</a></p>
         <p className="text-gray-700">Phone: <a href="tel:+15551234567" className="text-pink-600 hover:underline">+1 555 123 4567</a></p>
       </div>
       <div className="bg-white rounded-xl shadow p-8">

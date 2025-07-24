@@ -1,40 +1,45 @@
-# 🛒 Product Catalog – Fullstack E-Commerce App
+# FlexiShop
 
-A fullstack eCommerce web application built with:
+A modern, fullstack e-commerce platform for seamless online shopping experiences.
 
-- ⚙️ **FastAPI** (Python) for the backend  
-- 🎨 **React + TypeScript + Tailwind CSS + ShadCN UI** for the frontend  
-- 🛢️ **PostgreSQL** for the database (or SQLite in development)  
-- 🔐 **JWT Auth** (Login/Register)  
-- 🛍️ Product browsing, cart, checkout, order history  
-- 💳 Stripe integration (coming soon)  
-- 🗃️ MinIO file storage (coming soon)
+---
+
+## ✨ Overview
+
+FlexiShop is a feature-rich e-commerce web application built with:
+- **FastAPI** (Python) for a robust backend API
+- **React + TypeScript + Vite + Tailwind CSS + ShadCN UI** for a beautiful, responsive frontend
+- **PostgreSQL** (or SQLite for development) as the database
+- **JWT Authentication** for secure user accounts
+
+It supports user registration, product browsing, cart management, order placement, and order history. Admin features and advanced integrations are planned.
 
 ---
 
 ## 📁 Project Structure
 
 ```bash
-product-catalog/
-├── backend/              # FastAPI app
-│   ├── app/
-│   │   ├── models/
-│   │   ├── routers/
-│   │   ├── schemas/
-│   │   ├── core/
-│   │   └── main.py
-│   ├── .env
-│   └── requirements.txt
-│
-├── frontend/             # React + Vite + Tailwind + ShadCN
+FlexiShop/
+├── backend/
+│   └── app/
+│       ├── core/         # Security, dependencies
+│       ├── models/       # SQLAlchemy models
+│       ├── routers/      # API endpoints (auth, products, cart, etc.)
+│       ├── schemas/      # Pydantic schemas
+│       ├── main.py       # FastAPI entrypoint
+│       ├── database.py   # DB connection
+│       └── ...
+│   ├── create_admin.py   # Script to create admin user
+│   ├── init_db.py        # DB initialization
+│   └── ...
+├── frontend/
 │   ├── src/
-│   │   ├── pages/
-│   │   ├── components/
-│   │   ├── lib/
-│   │   └── App.tsx
+│   │   ├── pages/        # Main app pages (Home, Products, Cart, etc.)
+│   │   ├── components/   # Reusable UI components
+│   │   ├── lib/          # API and utility functions
+│   │   └── ...
 │   ├── index.html
-│   └── vite.config.ts
-│
+│   └── ...
 └── README.md
 ```
 
@@ -42,31 +47,28 @@ product-catalog/
 
 ## 🚀 Getting Started
 
-### 🧠 Prerequisites
-
+### Prerequisites
 - Python 3.10+
 - Node.js 18+
-- PostgreSQL or SQLite
+- PostgreSQL (or SQLite for dev)
 
-### 🔧 Backend (FastAPI)
-
+### Backend (FastAPI)
 ```bash
 cd backend
 python -m venv .venv
-source .venv/bin/activate      # or .venv\Scripts\activate on Windows
-
+# On Windows:
+.venv\Scripts\activate
+# On Mac/Linux:
+source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
-
 Create an admin user:
-
 ```bash
-python create_admin.py
+python app/create_admin.py
 ```
 
-### 💻 Frontend (React)
-
+### Frontend (React)
 ```bash
 cd frontend
 npm install
@@ -75,65 +77,53 @@ npm run dev
 
 ---
 
-## 🔐 Auth Flow
-
-- `POST /auth/register` – create account  
-- `POST /auth/login` – get JWT token  
-- `GET /users/me` – get current user  
-- `Authorization: Bearer <token>` – required for private routes
+## 🔐 Authentication Flow
+- Register: `POST /auth/register`
+- Login: `POST /auth/login` (returns JWT)
+- Get current user: `GET /users/me` (JWT required)
+- Use `Authorization: Bearer <token>` for protected routes
 
 ---
 
 ## 🛍️ Features
-
-- ✅ Register / Login / Logout  
-- ✅ List & browse products  
-- ✅ Add to cart / remove / clear  
-- ✅ Checkout (create order from cart)  
-- ✅ View order history  
-- ⚠️ Stripe & MinIO coming soon
-
----
-
-## 🌍 Deployment (Planned)
-
-- Docker & Nginx setup  
-- PostgreSQL DB  
-- Stripe live integration  
-- File uploads to MinIO or S3
+- User registration, login, logout
+- Product catalog browsing
+- Add/remove/clear cart items
+- Checkout and order creation
+- View order history
+- Admin user (script)
+- [Planned] Stripe payments
+- [Planned] Product image uploads (MinIO/S3)
+- [Planned] Admin dashboard
 
 ---
 
-## 📚 Tech Stack
-
+## 🛠️ Tech Stack
 | Layer     | Stack                                         |
 |-----------|-----------------------------------------------|
-| Frontend  | React + Vite + TypeScript + Tailwind + ShadCN |
-| Backend   | FastAPI + SQLAlchemy + Pydantic + JWT         |
+| Frontend  | React, Vite, TypeScript, Tailwind, ShadCN UI  |
+| Backend   | FastAPI, SQLAlchemy, Pydantic, JWT            |
 | Database  | PostgreSQL / SQLite                           |
-| Auth      | OAuth2 with Bearer JWT                        |
-| Payment   | Stripe (WIP)                                  |
-| Storage   | MinIO / S3 (WIP)                              |
+| Auth      | OAuth2 with JWT Bearer                        |
+| Payment   | Stripe (planned)                              |
+| Storage   | MinIO / S3 (planned)                          |
 
 ---
 
-## 📦 TODO
-
-- [x] Auth (register/login/logout)  
-- [x] Cart + checkout  
-- [x] Orders + history  
-- [ ] Stripe payments  
-- [ ] Product image uploads  
-- [ ] Admin dashboard (basic)
+## 📦 Roadmap / TODO
+- [x] Auth (register/login/logout)
+- [x] Cart & checkout
+- [x] Orders & history
+- [ ] Stripe payments
+- [ ] Product image uploads
+- [ ] Admin dashboard
 
 ---
 
-## 🧑‍💻 Author
-
+## 👤 Author
 Made with ❤️ by [Rayyan Oumlil](https://github.com/Rayyan-Oumlil)
 
 ---
 
 ## 🪪 License
-
 MIT

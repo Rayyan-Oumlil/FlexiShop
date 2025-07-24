@@ -5,10 +5,10 @@ function Footer() {
   return (
     <footer className="w-full bg-black text-white pt-12 pb-6 border-t border-zinc-800 mt-12">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row flex-wrap justify-between gap-12 px-6">
-        {/* MyStore / About */}
+        {/* FlexiShop / About */}
         <div className="flex-1 min-w-[200px] mb-8 md:mb-0">
           <Link to="/" className="flex items-center gap-2 text-2xl font-extrabold text-white mb-2 hover:text-pink-400 transition-colors duration-200">
-            <span role="img" aria-label="bag">🛍️</span> MyStore
+            <span role="img" aria-label="bag">🛍️</span> FlexiShop
           </Link>
           <p className="text-zinc-300 text-sm mt-2">Your trusted shop for tech, fashion, and more. Fast delivery, secure payment, 24/7 support.</p>
         </div>
@@ -37,7 +37,7 @@ function Footer() {
         {/* Contact */}
         <div className="flex-1 min-w-[180px]">
           <h4 className="font-bold text-lg mb-3">Contact</h4>
-          <p className="text-zinc-200 text-sm mb-1">contact@mystore.com</p>
+          <p className="text-zinc-200 text-sm mb-1">contact@flexishop.com</p>
           <p className="text-zinc-200 text-sm mb-4">+1 555 123 4567</p>
           <div className="flex gap-4 mt-2">
             <a href="#" className="text-pink-400 hover:text-white" title="Twitter" aria-label="Twitter">🐦</a>
@@ -48,7 +48,7 @@ function Footer() {
         </div>
       </div>
       <div className="mt-10 text-center text-zinc-400 text-xs border-t border-zinc-800 pt-4">
-        &copy; {new Date().getFullYear()} MyStore. All rights reserved.
+        &copy; {new Date().getFullYear()} FlexiShop. All rights reserved.
       </div>
     </footer>
   );
@@ -66,7 +66,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 text-xl font-extrabold text-white tracking-wide hover:text-pink-400 transition-colors duration-200">
             <ShoppingBag className="w-7 h-7 text-pink-400" />
-            <span>MyStore</span>
+            <span>FlexiShop</span>
           </Link>
 
           {/* Liens */}

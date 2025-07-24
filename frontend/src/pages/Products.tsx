@@ -21,7 +21,7 @@ export default function ProductsPage() {
   const [sort, setSort] = useState("none");
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/products")
+    fetch("/api/products")
       .then((res) => {
         if (!res.ok) throw new Error("Erreur chargement des produits")
         return res.json()
@@ -63,7 +63,7 @@ export default function ProductsPage() {
           ];
           const token = localStorage.getItem("token");
           Promise.all(featured.map(prod =>
-            fetch("http://localhost:8000/api/products/", {
+            fetch("/api/products/", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
