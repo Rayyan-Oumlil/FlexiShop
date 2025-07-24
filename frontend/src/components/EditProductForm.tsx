@@ -11,12 +11,14 @@ export default function EditProductForm({ product, onProductUpdated, onClose }: 
   const [image_url, setImageUrl] = useState(product.image_url || "");
   const [loading, setLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL || "";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`/api/products/${product.id}`, {
+      const res = await fetch(`${API_URL}/api/products/${product.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -25,7 +25,8 @@ export default function AccountManagement() {
   React.useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    fetch("/api/users/me", {
+    const API_URL = import.meta.env.VITE_API_URL || "";
+    fetch(`${API_URL}/api/users/me`, {
       headers: { "Authorization": `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -42,8 +43,9 @@ export default function AccountManagement() {
     setProfileMessage(null);
     setProfileError(null);
     const token = localStorage.getItem("token");
+    const API_URL = import.meta.env.VITE_API_URL || "";
     try {
-      const res = await fetch("/api/users/me", {
+      const res = await fetch(`${API_URL}/api/users/me`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -72,8 +74,9 @@ export default function AccountManagement() {
     setPasswordMessage(null);
     setPasswordError(null);
     const token = localStorage.getItem("token");
+    const API_URL = import.meta.env.VITE_API_URL || "";
     try {
-      const res = await fetch("/api/users/change-password", {
+      const res = await fetch(`${API_URL}/api/users/change-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -103,8 +106,9 @@ export default function AccountManagement() {
     setDeleteMessage(null);
     setDeleteError(null);
     const token = localStorage.getItem("token");
+    const API_URL = import.meta.env.VITE_API_URL || "";
     try {
-      const res = await fetch("/api/users/delete", {
+      const res = await fetch(`${API_URL}/api/users/delete`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

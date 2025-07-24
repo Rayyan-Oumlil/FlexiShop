@@ -13,10 +13,12 @@ export default function LoginPage() {
   const [signupSuccess, setSignupSuccess] = useState("")
   const [signupError, setSignupError] = useState("")
 
+  const API_URL = import.meta.env.VITE_API_URL || "";
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    fetch("/api/auth/login", {
+    fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -48,7 +50,7 @@ export default function LoginPage() {
     setSignupLoading(true)
     setSignupSuccess("")
     setSignupError("")
-    fetch("/api/users/register", {
+    fetch(`${API_URL}/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
