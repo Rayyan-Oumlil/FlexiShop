@@ -1,12 +1,11 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 const articles = [
   {
     id: 1,
-    title: "Welcome to MyStore: Our Story & Mission",
+    title: "Welcome to FlexiShop: Our Story & Mission",
     image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80",
-    summary: "Discover how MyStore started, our values, and our commitment to customer happiness.",
+    summary: "Discover how FlexiShop started, our values, and our commitment to customer happiness.",
     date: "2024-05-01"
   },
   {

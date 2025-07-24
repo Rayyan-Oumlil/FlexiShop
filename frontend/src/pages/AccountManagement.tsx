@@ -25,7 +25,7 @@ export default function AccountManagement() {
   React.useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    fetch("http://localhost:8000/api/users/me", {
+    fetch("/api/users/me", {
       headers: { "Authorization": `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -43,7 +43,7 @@ export default function AccountManagement() {
     setProfileError(null);
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:8000/api/users/me", {
+      const res = await fetch("/api/users/me", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export default function AccountManagement() {
     setPasswordError(null);
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:8000/api/users/change-password", {
+      const res = await fetch("/api/users/change-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +104,7 @@ export default function AccountManagement() {
     setDeleteError(null);
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:8000/api/users/delete", {
+      const res = await fetch("/api/users/delete", {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function ReportProblem() {
   return (
     <div className="max-w-xl mx-auto py-16 px-4">

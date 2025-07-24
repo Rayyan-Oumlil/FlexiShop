@@ -16,14 +16,14 @@ export default function ProductDetail() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:8000/api/products/${id}`)
+    fetch(`/api/products/${id}`)
       .then(res => res.json())
       .then(setProduct)
       .finally(() => setLoading(false));
   }, [id]);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/products/${id}/reviews`)
+    fetch(`/api/products/${id}/reviews`)
       .then(res => res.json())
       .then(setReviews);
   }, [id, reviewSuccess]);
@@ -35,7 +35,7 @@ export default function ProductDetail() {
     setReviewSuccess("");
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`http://localhost:8000/api/products/${id}/reviews`, {
+      const res = await fetch(`/api/products/${id}/reviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

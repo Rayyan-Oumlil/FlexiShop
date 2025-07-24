@@ -12,7 +12,7 @@ export default function AddProductForm({ onProductAdded }: { onProductAdded: (pr
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:8000/api/products/", {
+      const res = await fetch("/api/products/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

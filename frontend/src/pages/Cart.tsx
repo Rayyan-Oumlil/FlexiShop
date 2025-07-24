@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Button } from "../components/ui/button"
-import { getCart, clearCart } from "../lib/cart"
+import { getCart } from "../lib/cart"
 
 type CartItem = {
   id: number
@@ -17,9 +17,6 @@ export default function CartPage() {
   const [items, setItems] = useState<CartItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [orderHistory, setOrderHistory] = useState<any[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
@@ -41,40 +38,6 @@ export default function CartPage() {
       })
       .finally(() => setLoading(false))
   }
-
-  const handleClear = () => {
-    clearCart()
-      .then(() => {
-        alert("Panier vidé ✅")
-        loadCart()
-      })
-      .catch(() => alert("Erreur vidage ❌"))
-  }
-
-  const handleCheckout = async () => {
-    setCheckoutLoading(true);
-    setCheckoutMessage(null);
-    setCheckoutError(null);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:8000/api/orders/", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Erreur lors du checkout");
-      setCheckoutMessage("Commande validée ! ✅");
-      clearCart();
-      loadCart();
-      await fetchOrderHistory();
-    } catch (err: any) {
-      setCheckoutError(err.message || "Erreur lors du checkout");
-    } finally {
-      setCheckoutLoading(false);
-    }
-  };
 
   const handleStripeCheckout = async () => {
     setStripeLoading(true);
@@ -100,7 +63,7 @@ export default function CartPage() {
           quantity: 1,
         });
       }
-      const res = await fetch("http://localhost:8000/api/cart/payment/create-checkout-session", {
+      const res = await fetch("/api/cart/payment/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items: lineItems })
@@ -120,7 +83,7 @@ export default function CartPage() {
     setHistoryError(null);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:8000/api/orders/history", {
+      const res = await fetch("/api/orders/history", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();

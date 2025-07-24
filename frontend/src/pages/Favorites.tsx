@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 
 function getWishlist(): number[] {
@@ -20,7 +20,7 @@ export default function Favorites() {
       setLoading(false);
       return;
     }
-    fetch(`http://localhost:8000/api/products`)
+    fetch(`/api/products`)
       .then(res => res.json())
       .then(data => {
         setProducts(data.filter((p: any) => ids.includes(p.id)));

@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Product Catalog API",
+    title="FlexiShop API",
     version="1.0",
 )
 app.add_middleware(
@@ -35,7 +35,7 @@ def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema = get_openapi(
-        title="Product Catalog API",
+        title="FlexiShop API",
         version="1.0",
         description="API avec JWT Auth",
         routes=app.routes,

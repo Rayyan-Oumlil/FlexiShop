@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaLaptop, FaTshirt, FaMobileAlt, FaShippingFast, FaLock, FaSmile, FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaLaptop, FaTshirt, FaMobileAlt, FaShippingFast, FaLock, FaSmile } from "react-icons/fa";
 
 export default function Home() {
   return (
@@ -7,7 +7,7 @@ export default function Home() {
       {/* HERO SECTION */}
       <section className="w-full bg-gradient-to-r from-pink-400 via-pink-300 to-pink-500 text-white py-16 px-4 flex flex-col md:flex-row items-center justify-between mb-12 shadow-lg">
         <div className="flex-1 flex flex-col items-start md:items-start md:pl-16">
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">Bienvenue sur <span className="text-yellow-200">MyStore</span> !</h1>
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">Bienvenue sur <span className="text-yellow-200">FlexiShop</span> !</h1>
           <p className="text-xl md:text-2xl mb-8 max-w-xl drop-shadow">La boutique qui réunit le meilleur de la tech, de la mode et plus encore. Livraison rapide, paiement sécurisé, support 24/7.</p>
           <Link
             to="/products"
@@ -88,9 +88,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why Choose MonShop Section (améliorée) */}
+      {/* Why Choose FlexiShop Section (améliorée) */}
       <section className="w-full max-w-none bg-white/80 rounded-2xl shadow p-8 mb-12 mt-16">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-pink-500 mb-6">Pourquoi choisir MyStore ?</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-center text-pink-500 mb-6">Pourquoi choisir FlexiShop ?</h2>
         <div className="flex flex-col md:flex-row gap-6 justify-center">
           <div className="flex-1 bg-white rounded-2xl shadow p-6 flex flex-col items-center">
             <FaShippingFast className="text-3xl mb-2 text-pink-400" />
@@ -155,7 +155,7 @@ export default function Home() {
           <div className="flex-1 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg p-8 flex flex-col items-center border border-pink-100 hover:scale-105 transition-transform">
             <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Sarah L." className="w-16 h-16 rounded-full mb-3 shadow" />
             <div className="flex gap-1 mb-2 text-yellow-400 text-2xl">★★★★★</div>
-            <blockquote className="italic text-gray-700 text-center mb-3 text-lg">“I love MyStore! I always find what I need and the support is fantastic.”</blockquote>
+            <blockquote className="italic text-gray-700 text-center mb-3 text-lg">“I love FlexiShop! I always find what I need and the support is fantastic.”</blockquote>
             <span className="font-semibold text-pink-500">— Sarah L.</span>
           </div>
         </div>

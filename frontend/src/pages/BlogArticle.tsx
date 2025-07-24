@@ -1,13 +1,12 @@
-import React from "react";
 import { useParams, Link } from "react-router-dom";
 
 const articles = [
   {
     id: 1,
-    title: "Welcome to MyStore: Our Story & Mission",
+    title: "Welcome to FlexiShop: Our Story & Mission",
     image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80",
     date: "2024-05-01",
-    content: `MyStore was founded with a simple mission: to bring the best of tech, fashion, and lifestyle products to everyone, everywhere.\n\nWe believe in quality, speed, and customer happiness. Since our launch, we’ve helped thousands of customers discover new products and enjoy a seamless shopping experience. Our team is passionate about innovation and service.\n\nWe’re constantly growing, listening to your feedback, and improving our platform to serve you better every day.`
+    content: `FlexiShop was founded with a simple mission: to bring the best of tech, fashion, and lifestyle products to everyone, everywhere.\n\nWe believe in quality, speed, and customer happiness. Since our launch, we’ve helped thousands of customers discover new products and enjoy a seamless shopping experience. Our team is passionate about innovation and service.\n\nWe’re constantly growing, listening to your feedback, and improving our platform to serve you better every day.`
   },
   {
     id: 2,
