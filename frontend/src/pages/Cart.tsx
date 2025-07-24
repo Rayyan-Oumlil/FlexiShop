@@ -63,7 +63,7 @@ export default function CartPage() {
           quantity: 1,
         });
       }
-      const res = await fetch("/api/cart/payment/create-checkout-session", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/payment/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items: lineItems })
@@ -83,7 +83,7 @@ export default function CartPage() {
     setHistoryError(null);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("/api/orders/history", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/history`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       const data = await res.json();

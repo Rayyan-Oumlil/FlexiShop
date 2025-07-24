@@ -21,7 +21,8 @@ export default function ProductsPage() {
   const [sort, setSort] = useState("none");
 
   useEffect(() => {
-    fetch("/api/products")
+    const API_URL = import.meta.env.VITE_API_URL || "";
+    fetch(`${API_URL}/api/products`)
       .then((res) => {
         if (!res.ok) throw new Error("Erreur chargement des produits")
         return res.json()
@@ -63,7 +64,7 @@ export default function ProductsPage() {
           ];
           const token = localStorage.getItem("token");
           Promise.all(featured.map(prod =>
-            fetch("/api/products/", {
+            fetch(`${API_URL}/api/products/`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

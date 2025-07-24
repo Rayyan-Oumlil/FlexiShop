@@ -23,7 +23,8 @@ export default function OrderHistory() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("/api/orders/history", {
+        const API_URL = import.meta.env.VITE_API_URL || "";
+        const res = await fetch(`${API_URL}/api/orders/history`, {
           headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`
           }

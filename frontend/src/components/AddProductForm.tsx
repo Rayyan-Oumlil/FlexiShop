@@ -7,12 +7,14 @@ export default function AddProductForm({ onProductAdded }: { onProductAdded: (pr
   const [image_url, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL || "";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("/api/products/", {
+      const res = await fetch(`${API_URL}/api/products/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,37 +27,65 @@ export default function AddProductForm({ onProductAdded }: { onProductAdded: (pr
           image_url,
         }),
       });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Erreur ajout produit");
       onProductAdded(data);
-    } catch (err: any) {
-      alert(err.message || "Erreur ajout produit");
+      alert("Product added successfully!");
+      setName("");
+      setDescription("");
+      setPrice("");
+      setImageUrl("");
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Failed to add product.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-8 p-4 border rounded bg-white space-y-4">
+    <form onSubmit={handleSubmit}>
+      <h2>Add New Product</h2>
       <div>
-        <label className="block mb-1 font-medium">Nom</label>
-        <input className="border p-2 w-full" value={name} onChange={e => setName(e.target.value)} required />
+        <label>Name:</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
       </div>
       <div>
-        <label className="block mb-1 font-medium">Description</label>
-        <textarea className="border p-2 w-full" value={description} onChange={e => setDescription(e.target.value)} required />
+        <label>Description:</label>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
       </div>
       <div>
-        <label className="block mb-1 font-medium">Prix</label>
-        <input className="border p-2 w-full" type="number" min="0" value={price} onChange={e => setPrice(e.target.value)} required />
+        <label>Price:</label>
+        <input
+          type="number"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+        />
       </div>
       <div>
-        <label className="block mb-1 font-medium">Image URL</label>
-        <input className="border p-2 w-full" value={image_url} onChange={e => setImageUrl(e.target.value)} />
+        <label>Image URL:</label>
+        <input
+          type="url"
+          value={image_url}
+          onChange={(e) => setImageUrl(e.target.value)}
+          required
+        />
       </div>
-      <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded" disabled={loading}>
-        {loading ? "Ajout..." : "Ajouter"}
+      <button type="submit" disabled={loading}>
+        {loading ? "Adding..." : "Add Product"}
       </button>
     </form>
   );
-} 
+}

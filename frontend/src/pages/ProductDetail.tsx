@@ -14,16 +14,18 @@ export default function ProductDetail() {
   const [reviewError, setReviewError] = useState("");
   const [reviewSuccess, setReviewSuccess] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL || "";
+
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/products/${id}`)
+    fetch(`${API_URL}/api/products/${id}`)
       .then(res => res.json())
       .then(setProduct)
       .finally(() => setLoading(false));
   }, [id]);
 
   useEffect(() => {
-    fetch(`/api/products/${id}/reviews`)
+    fetch(`${API_URL}/api/products/${id}/reviews`)
       .then(res => res.json())
       .then(setReviews);
   }, [id, reviewSuccess]);
@@ -35,7 +37,7 @@ export default function ProductDetail() {
     setReviewSuccess("");
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`/api/products/${id}/reviews`, {
+      const res = await fetch(`${API_URL}/api/products/${id}/reviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -20,7 +20,8 @@ export default function Favorites() {
       setLoading(false);
       return;
     }
-    fetch(`/api/products`)
+    const API_URL = import.meta.env.VITE_API_URL || "";
+    fetch(`${API_URL}/api/products`)
       .then(res => res.json())
       .then(data => {
         setProducts(data.filter((p: any) => ids.includes(p.id)));
