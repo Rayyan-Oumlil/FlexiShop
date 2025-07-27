@@ -5,13 +5,17 @@ from app.database import SessionLocal
 from app.models.admin_user import AdminUser
 from app.models.user import User
 from fastapi import status
+from pydantic import BaseModel
 
-
-from app.core.security import verify_password, create_access_token
+from app.core.security import verify_password, create_access_token, get_password_hash
 from app.schemas.auth import Token
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
+
+class AdminCreate(BaseModel):
+    email: str
+    password: str
 
 def get_db():
     db = SessionLocal()
@@ -19,6 +23,26 @@ def get_db():
         yield db
     finally:
         db.close()
+
+@router.post("/create-admin", status_code=201)
+def create_admin(admin_data: AdminCreate, db: Session = Depends(get_db)):
+    """Endpoint temporaire pour créer un admin sur Render"""
+    # Vérifier si l'admin existe déjà
+    existing_admin = db.query(AdminUser).filter(AdminUser.email == admin_data.email).first()
+    if existing_admin:
+        raise HTTPException(status_code=400, detail="Admin already exists")
+    
+    # Créer le nouvel admin
+    admin = AdminUser(
+        email=admin_data.email,
+        hashed_password=get_password_hash(admin_data.password)
+    )
+    db.add(admin)
+    db.commit()
+    db.refresh(admin)
+    
+    return {"message": "Admin created successfully", "email": admin.email}
+
 
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
