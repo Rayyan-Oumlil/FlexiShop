@@ -12,8 +12,19 @@ if DATABASE_URL.startswith("sqlite"):
         DATABASE_URL, connect_args={"check_same_thread": False}
     )
 else:
-    # Pour PostgreSQL (Render)
-    engine = create_engine(DATABASE_URL)
+    # Pour PostgreSQL (Render) - gérer les problèmes SSL
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    
+    # Configuration pour éviter les problèmes SSL
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,
+        pool_recycle=300,
+        connect_args={
+            "sslmode": "require"
+        } if "postgresql" in DATABASE_URL else {}
+    )
 
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
