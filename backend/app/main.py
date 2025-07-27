@@ -7,7 +7,8 @@ from app.routers import cart
 from app.routers import order 
 from fastapi.middleware.cors import CORSMiddleware
 
-Base.metadata.create_all(bind=engine)
+# Temporairement commenté pour éviter les erreurs SSL au démarrage
+# Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="FlexiShop API",
@@ -33,6 +34,14 @@ app.include_router(users.router, prefix="/api")
 app.include_router(cart.router, prefix="/api")
 app.include_router(order.router, prefix="/api")  
 
+@app.get("/init-db")
+def init_database():
+    """Endpoint pour initialiser la base de données manuellement"""
+    try:
+        Base.metadata.create_all(bind=engine)
+        return {"message": "Database initialized successfully"}
+    except Exception as e:
+        return {"error": f"Failed to initialize database: {str(e)}"}
 
 from fastapi.openapi.utils import get_openapi
 
