@@ -7,8 +7,13 @@ from app.routers import cart
 from app.routers import order 
 from fastapi.middleware.cors import CORSMiddleware
 
-# Temporairement commenté pour éviter les erreurs SSL au démarrage
-# Base.metadata.create_all(bind=engine)
+# Créer les tables au démarrage avec gestion d'erreur
+try:
+    Base.metadata.create_all(bind=engine)
+    print("✅ Database tables created successfully")
+except Exception as e:
+    print(f"⚠️ Warning: Could not create database tables at startup: {e}")
+    print("Tables will be created when first accessed")
 
 app = FastAPI(
     title="FlexiShop API",
