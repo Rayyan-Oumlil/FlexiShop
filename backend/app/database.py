@@ -11,8 +11,16 @@ if DATABASE_URL.startswith("sqlite"):
         DATABASE_URL, connect_args={"check_same_thread": False}
     )
 else:
-    # Configuration pour PostgreSQL (si vous changez plus tard)
-    engine = create_engine(DATABASE_URL)
+    # Configuration pour PostgreSQL (Render)
+    # Render fournit une URL PostgreSQL, mais on peut forcer SQLite pour simplifier
+    if os.getenv("RENDER", "false").lower() == "true":
+        # Sur Render, utiliser SQLite avec disque persistant
+        engine = create_engine(
+            "sqlite:///./catalog.db", connect_args={"check_same_thread": False}
+        )
+    else:
+        # Configuration pour PostgreSQL (si vous changez plus tard)
+        engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
