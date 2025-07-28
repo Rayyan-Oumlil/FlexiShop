@@ -16,6 +16,7 @@ except Exception as e:
     print("Tables will be created when first accessed")
 
 app = FastAPI(
+    
     title="FlexiShop API",
     version="1.0",
 )
