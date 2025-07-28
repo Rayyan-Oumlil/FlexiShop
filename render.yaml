@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: flexishop-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: DATABASE_URL
+        value: sqlite:///./catalog.db
+      - key: RENDER
+        value: true
+    autoDeploy: true 

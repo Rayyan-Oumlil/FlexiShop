@@ -5,48 +5,52 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] py-0 px-0 text-center bg-gradient-to-b from-pink-50 via-white to-pink-100">
       {/* HERO SECTION */}
-      <section className="w-full bg-gradient-to-r from-pink-400 via-pink-300 to-pink-500 text-white py-16 px-4 flex flex-col md:flex-row items-center justify-between mb-12 shadow-lg">
-        <div className="flex-1 flex flex-col items-start md:items-start md:pl-16">
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">Bienvenue sur <span className="text-yellow-200">FlexiShop</span> !</h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-xl drop-shadow">La boutique qui réunit le meilleur de la tech, de la mode et plus encore. Livraison rapide, paiement sécurisé, support 24/7.</p>
+      <section className="w-full bg-gradient-to-r from-pink-400 via-pink-300 to-pink-500 text-white py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between mb-8 sm:mb-12 shadow-lg">
+        <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left mb-8 lg:mb-0 lg:pl-8 xl:pl-16">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 drop-shadow-lg leading-tight">
+            Bienvenue sur <span className="text-yellow-200">FlexiShop</span> !
+          </h1>
+          <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 max-w-xl drop-shadow leading-relaxed">
+            La boutique qui réunit le meilleur de la tech, de la mode et plus encore. Livraison rapide, paiement sécurisé, support 24/7.
+          </p>
           <Link
             to="/products"
-            className="bg-yellow-300 hover:bg-yellow-400 text-pink-900 font-bold rounded-full shadow px-10 py-4 text-xl transition duration-200"
+            className="bg-yellow-300 hover:bg-yellow-400 text-pink-900 font-bold rounded-full shadow-lg px-6 sm:px-8 md:px-10 py-3 sm:py-4 text-lg sm:text-xl transition duration-200 transform hover:scale-105"
           >
             Découvrir nos produits
           </Link>
         </div>
-        <div className="flex-1 flex justify-center mt-10 md:mt-0">
-          <img src="/vite.svg" alt="Hero" className="w-72 md:w-96 drop-shadow-2xl animate-bounce-slow" />
+        <div className="flex-1 flex justify-center lg:justify-end">
+          <img src="/vite.svg" alt="Hero" className="w-48 sm:w-64 md:w-72 lg:w-80 xl:w-96 drop-shadow-2xl animate-bounce-slow" />
         </div>
       </section>
 
       {/* CATÉGORIES */}
-      <section className="w-full max-w-6xl mx-auto mb-16">
-        <h2 className="text-3xl font-extrabold text-pink-600 mb-8">Nos univers</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform border border-pink-100">
-            <FaLaptop className="text-5xl text-pink-400 mb-4" />
-            <h3 className="font-bold text-lg mb-2">Informatique</h3>
-            <p className="text-gray-500">Ordinateurs, accessoires, périphériques et plus.</p>
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-pink-600 mb-6 sm:mb-8 text-center">Nos univers</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col items-center hover:scale-105 transition-transform border border-pink-100">
+            <FaLaptop className="text-4xl sm:text-5xl text-pink-400 mb-3 sm:mb-4" />
+            <h3 className="font-bold text-base sm:text-lg mb-2 text-center">Informatique</h3>
+            <p className="text-gray-500 text-sm sm:text-base text-center">Ordinateurs, accessoires, périphériques et plus.</p>
           </div>
-          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform border border-pink-100">
-            <FaMobileAlt className="text-5xl text-pink-400 mb-4" />
-            <h3 className="font-bold text-lg mb-2">Téléphonie</h3>
-            <p className="text-gray-500">Smartphones, tablettes, objets connectés.</p>
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col items-center hover:scale-105 transition-transform border border-pink-100">
+            <FaMobileAlt className="text-4xl sm:text-5xl text-pink-400 mb-3 sm:mb-4" />
+            <h3 className="font-bold text-base sm:text-lg mb-2 text-center">Téléphonie</h3>
+            <p className="text-gray-500 text-sm sm:text-base text-center">Smartphones, tablettes, objets connectés.</p>
           </div>
-          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform border border-pink-100">
-            <FaTshirt className="text-5xl text-pink-400 mb-4" />
-            <h3 className="font-bold text-lg mb-2">Mode</h3>
-            <p className="text-gray-500">Vêtements, chaussures, accessoires tendance.</p>
+          <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col items-center hover:scale-105 transition-transform border border-pink-100 sm:col-span-2 lg:col-span-1">
+            <FaTshirt className="text-4xl sm:text-5xl text-pink-400 mb-3 sm:mb-4" />
+            <h3 className="font-bold text-base sm:text-lg mb-2 text-center">Mode</h3>
+            <p className="text-gray-500 text-sm sm:text-base text-center">Vêtements, chaussures, accessoires tendance.</p>
           </div>
         </div>
       </section>
 
       {/* MEILLEURES VENTES */}
-      <section className="w-full max-w-6xl mx-auto mb-16">
-        <h2 className="text-3xl font-extrabold text-pink-600 mb-8">Nos meilleures ventes</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-pink-600 mb-6 sm:mb-8 text-center">Nos meilleures ventes</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Sony Alpha 7 IV */}
           <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-yellow-100 hover:scale-105 transition-transform">
             <img src="https://d3d71ba2asa5oz.cloudfront.net/12008909/images/sona7m42870bk-uu_1.png" alt="Sony Alpha 7 IV" className="w-32 h-32 object-cover rounded-xl mb-4" />

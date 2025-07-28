@@ -94,7 +94,7 @@ export default function ProductCard({ product, onDelete, onProductUpdated }: { p
         `
         bg-white border border-gray-200 rounded-xl shadow-xl
         transition-transform duration-200 hover:scale-105 hover:shadow-2xl flex flex-col
-        overflow-hidden
+        overflow-hidden h-full
       `
       }
     >
@@ -107,39 +107,39 @@ export default function ProductCard({ product, onDelete, onProductUpdated }: { p
         {/* Heart icon for wishlist */}
         <button
           onClick={toggleFav}
-          className={`absolute top-2 right-2 text-2xl z-10 transition-colors ${isFav ? "text-pink-500" : "text-gray-300 hover:text-pink-400"}`}
+          className={`absolute top-2 right-2 text-xl sm:text-2xl z-10 transition-colors ${isFav ? "text-pink-500" : "text-gray-300 hover:text-pink-400"}`}
           aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
         >
           {isFav ? "♥" : "♡"}
         </button>
       </div>
 
-      <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-lg font-bold text-blue-700 mb-1">{product.name}</h3>
-        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
+      <div className="p-3 sm:p-4 flex flex-col flex-grow">
+        <h3 className="text-base sm:text-lg font-bold text-blue-700 mb-1 line-clamp-1">{product.name}</h3>
+        <p className="text-xs sm:text-sm text-muted-foreground mb-2 line-clamp-2 flex-grow">
           {product.description}
         </p>
-        <p className="text-lg font-bold mb-4">{product.price} €</p>
+        <p className="text-base sm:text-lg font-bold mb-3 sm:mb-4">{product.price} €</p>
 
         {/* Bouton panier */}
         {!isAdmin() && (
-          <Button onClick={handleAdd} disabled={loading} className="mt-auto">
+          <Button onClick={handleAdd} disabled={loading} className="mt-auto text-xs sm:text-sm py-2">
             {loading ? "Ajout..." : "Ajouter au panier"}
           </Button>
         )}
-        <Link to={`/products/${product.id}`} className="mt-2 text-pink-600 hover:underline font-semibold text-center block">View Details</Link>
+        <Link to={`/products/${product.id}`} className="mt-2 text-pink-600 hover:underline font-semibold text-center block text-xs sm:text-sm">View Details</Link>
         {isAdmin() && (
-          <>
+          <div className="space-y-2 mt-2">
             <Button
               onClick={handleDelete}
               disabled={deleting}
-              className="mt-2 bg-red-500 hover:bg-red-600 text-white"
+              className="w-full bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm py-2"
             >
               {deleting ? "Suppression..." : "Supprimer"}
             </Button>
             <Button
               onClick={() => setEditing(true)}
-              className="mt-2 bg-gray-200 text-gray-800 hover:bg-gray-300"
+              className="w-full bg-gray-200 text-gray-800 hover:bg-gray-300 text-xs sm:text-sm py-2"
             >
               Modifier
             </Button>
@@ -153,7 +153,7 @@ export default function ProductCard({ product, onDelete, onProductUpdated }: { p
                 onClose={() => setEditing(false)}
               />
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
