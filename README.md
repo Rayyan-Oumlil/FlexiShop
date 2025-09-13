@@ -9,7 +9,7 @@ A modern, fullstack e-commerce platform for seamless online shopping experiences
 FlexiShop is a feature-rich e-commerce web application built with:
 - **FastAPI** (Python) for a robust backend API
 - **React + TypeScript + Vite + Tailwind CSS + ShadCN UI** for a beautiful, responsive frontend
-- **PostgreSQL** (or SQLite for development) as the database
+- **PostgreSQL** as the database
 - **JWT Authentication** for secure user accounts
 
 It supports user registration, product browsing, cart management, order placement, and order history. Admin features and advanced integrations are planned.
@@ -50,7 +50,7 @@ FlexiShop/
 ### Prerequisites
 - Python 3.10+
 - Node.js 18+
-- PostgreSQL (or SQLite for dev)
+- PostgreSQL database
 
 ### Backend (FastAPI)
 ```bash
@@ -103,7 +103,7 @@ npm run dev
 |-----------|-----------------------------------------------|
 | Frontend  | React, Vite, TypeScript, Tailwind, ShadCN UI  |
 | Backend   | FastAPI, SQLAlchemy, Pydantic, JWT            |
-| Database  | PostgreSQL / SQLite                           |
+| Database  | PostgreSQL                                    |
 | Auth      | OAuth2 with JWT Bearer                        |
 | Payment   | Stripe (planned)                              |
 | Storage   | MinIO / S3 (planned)                          |
