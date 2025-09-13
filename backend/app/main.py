@@ -7,13 +7,13 @@ from app.routers import cart
 from app.routers import order 
 from fastapi.middleware.cors import CORSMiddleware
 
-# Créer les tables au démarrage avec gestion d'erreur
+# Create PostgreSQL tables on startup
 try:
     Base.metadata.create_all(bind=engine)
-    print("✅ Database tables created successfully")
+    print("✅ PostgreSQL database tables created successfully")
 except Exception as e:
-    print(f"⚠️ Warning: Could not create database tables at startup: {e}")
-    print("Tables will be created when first accessed")
+    print(f"❌ Error: Could not create database tables: {e}")
+    print("Please check your DATABASE_URL environment variable")
 
 app = FastAPI(
     
@@ -42,12 +42,12 @@ app.include_router(order.router, prefix="/api")
 
 @app.get("/init-db")
 def init_database():
-    """Endpoint pour initialiser la base de données manuellement"""
+    """Endpoint to manually initialize PostgreSQL database tables"""
     try:
         Base.metadata.create_all(bind=engine)
-        return {"message": "Database initialized successfully"}
+        return {"message": "PostgreSQL database initialized successfully"}
     except Exception as e:
-        return {"error": f"Failed to initialize database: {str(e)}"}
+        return {"error": f"Failed to initialize PostgreSQL database: {str(e)}"}
 
 from fastapi.openapi.utils import get_openapi
 
