@@ -11,5 +11,5 @@ services:
       - key: RENDER
         value: true
       - key: DATABASE_URL
-        value: postgresql://flexishop_db_sftb_user:a860GeGaKMktvQVLA5mPVXjzD0OQu8U6@dpg-d32h9jadbo4c73aedbqg-a.oregon-postgres.render.com/flexishop_db_sftb
+        value: ${DATABASE_URL}
     autoDeploy: true 
