@@ -12,14 +12,26 @@ try:
     Base.metadata.create_all(bind=engine)
     print("✅ PostgreSQL database tables created successfully")
 except Exception as e:
-    print(f"❌ Error: Could not create database tables: {e}")
-    print("Please check your DATABASE_URL environment variable")
+    print(f"⚠️ Warning: Could not create database tables at startup: {e}")
+    print("Tables will be created when first accessed")
+    print("This is normal for the first deployment")
 
 app = FastAPI(
-    
     title="FlexiShop API",
     version="1.0",
+    description="A modern e-commerce platform API",
 )
+
+@app.get("/")
+def read_root():
+    """Root endpoint - API welcome message"""
+    return {
+        "message": "Welcome to FlexiShop API! 🛒",
+        "version": "1.0",
+        "docs": "/docs",
+        "health": "/health",
+        "init_db": "/init-db"
+    }
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
