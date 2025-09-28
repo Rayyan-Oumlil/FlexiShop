@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from app.routers import products_supabase as products
 from app.routers import cart_supabase as cart
 from app.routers import order_supabase as order
-from app.routers import simple_auth as auth
+from app.routers import auth
 from app.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 
