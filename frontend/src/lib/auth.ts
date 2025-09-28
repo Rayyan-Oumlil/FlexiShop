@@ -4,16 +4,16 @@ export async function login(email: string, password: string) {
   const res = await fetch(`${API_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: email, password }),
+    body: JSON.stringify({ email, password }),
   });
   return res.json();
 }
 
-export async function register(email: string, password: string) {
-  const res = await fetch(`${API_URL}/api/users/register`, {
+export async function register(email: string, password: string, full_name: string, phone: string, address: string) {
+  const res = await fetch(`${API_URL}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, full_name, phone, address }),
   });
   return res.json();
 }

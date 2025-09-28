@@ -9,6 +9,9 @@ export default function LoginPage() {
   const [showSignup, setShowSignup] = useState(false)
   const [signupEmail, setSignupEmail] = useState("")
   const [signupPassword, setSignupPassword] = useState("")
+  const [signupFullName, setSignupFullName] = useState("")
+  const [signupPhone, setSignupPhone] = useState("")
+  const [signupAddress, setSignupAddress] = useState("")
   const [signupLoading, setSignupLoading] = useState(false)
   const [signupSuccess, setSignupSuccess] = useState("")
   const [signupError, setSignupError] = useState("")
@@ -21,10 +24,10 @@ export default function LoginPage() {
     fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/json"
       },
-      body: new URLSearchParams({
-        username: email,
+      body: JSON.stringify({
+        email: email,
         password: password
       })
     })
@@ -50,12 +53,18 @@ export default function LoginPage() {
     setSignupLoading(true)
     setSignupSuccess("")
     setSignupError("")
-    fetch(`${API_URL}/api/users/register`, {
+    fetch(`${API_URL}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ email: signupEmail, password: signupPassword })
+      body: JSON.stringify({ 
+        email: signupEmail, 
+        password: signupPassword,
+        full_name: signupFullName,
+        phone: signupPhone,
+        address: signupAddress
+      })
     })
       .then(async (res) => {
         const data = await res.json()
@@ -82,12 +91,45 @@ export default function LoginPage() {
             <p className="text-center text-gray-500 mb-6">Create your account to start shopping on FlexiShop.</p>
             <form className="space-y-6" onSubmit={handleSignup}>
               <div>
+                <label className="block text-base font-medium mb-2 text-gray-700">Full Name</label>
+                <Input
+                  type="text"
+                  placeholder="John Doe"
+                  value={signupFullName}
+                  onChange={(e) => setSignupFullName(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
+                />
+              </div>
+              <div>
                 <label className="block text-base font-medium mb-2 text-gray-700">Email</label>
                 <Input
                   type="email"
                   placeholder="you@example.com"
                   value={signupEmail}
                   onChange={(e) => setSignupEmail(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-medium mb-2 text-gray-700">Phone</label>
+                <Input
+                  type="tel"
+                  placeholder="+1234567890"
+                  value={signupPhone}
+                  onChange={(e) => setSignupPhone(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-base font-medium mb-2 text-gray-700">Address</label>
+                <Input
+                  type="text"
+                  placeholder="123 Main Street, City"
+                  value={signupAddress}
+                  onChange={(e) => setSignupAddress(e.target.value)}
                   required
                   className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
                 />
