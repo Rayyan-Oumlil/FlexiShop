@@ -1,26 +1,29 @@
 from fastapi import FastAPI
-from app.database import Base, engine
-from app.models import admin_user  # Important pour créer la table
-from app.routers import auth, products
-from app.routers import users
-from app.routers import cart
-from app.routers import order 
+from app.routers import products_supabase as products
+from app.routers import cart_supabase as cart
+from app.routers import order_supabase as order
+from app.routers import simple_auth as auth
+from app.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 
-# Create PostgreSQL tables on startup
+# Initialize Supabase connection
 try:
-    Base.metadata.create_all(bind=engine)
-    print("✅ PostgreSQL database tables created successfully")
+    from app.database import test_supabase_connection
+    if test_supabase_connection():
+        print("✅ Supabase connection successful")
+    else:
+        print("⚠️ Warning: Supabase connection failed")
 except Exception as e:
-    print(f"⚠️ Warning: Could not create database tables at startup: {e}")
-    print("Tables will be created when first accessed")
-    print("This is normal for the first deployment")
+    print(f"⚠️ Warning: Could not test Supabase connection: {e}")
 
 app = FastAPI(
     title="FlexiShop API",
     version="1.0",
-    description="A modern e-commerce platform API",
+    description="A modern e-commerce platform API with Supabase authentication",
+    docs_url="/docs",
+    redoc_url="/redoc"
 )
+
 
 @app.get("/")
 def read_root():
@@ -28,38 +31,48 @@ def read_root():
     return {
         "message": "Welcome to FlexiShop API! 🛒",
         "version": "1.0",
+        "database": "Supabase",
         "docs": "/docs",
-        "health": "/health",
-        "init_db": "/init-db"
+        "health": "/health"
     }
+# CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",                  # Dev local
-        "https://flexishop.my",                   # Ton domaine custom
-        "https://flexi-shop-two.vercel.app",      # Ton frontend Vercel
-        "https://flexishop.onrender.com"          # (optionnel, accès direct backend)
-    ],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Inclure les routes
+# Include all routes - Authentication first
 app.include_router(auth.router, prefix="/api")
 app.include_router(products.router, prefix="/api")
-app.include_router(users.router, prefix="/api")
 app.include_router(cart.router, prefix="/api")
 app.include_router(order.router, prefix="/api")  
 
-@app.get("/init-db")
-def init_database():
-    """Endpoint to manually initialize PostgreSQL database tables"""
+@app.get("/health")
+def health_check():
+    """Health check endpoint"""
     try:
-        Base.metadata.create_all(bind=engine)
-        return {"message": "PostgreSQL database initialized successfully"}
+        from app.database import test_supabase_connection
+        if test_supabase_connection():
+            return {
+                "status": "healthy",
+                "database": "Supabase connected",
+                "message": "FlexiShop API is running"
+            }
+        else:
+            return {
+                "status": "unhealthy",
+                "database": "Supabase connection failed",
+                "message": "Database connection issue"
+            }
     except Exception as e:
-        return {"error": f"Failed to initialize PostgreSQL database: {str(e)}"}
+        return {
+            "status": "error",
+            "database": "Unknown",
+            "message": f"Health check failed: {str(e)}"
+        }
 
 from fastapi.openapi.utils import get_openapi
 
@@ -69,18 +82,25 @@ def custom_openapi():
     openapi_schema = get_openapi(
         title="FlexiShop API",
         version="1.0",
-        description="API avec JWT Auth",
+        description="API avec Supabase Authentication",
         routes=app.routes,
     )
     openapi_schema["components"]["securitySchemes"] = {
         "BearerAuth": {
             "type": "http",
-            "scheme": "bearer",   
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+            "description": "Supabase JWT Token"
         }
     }
-    for path in openapi_schema["paths"].values():
-        for method in path.values():
-            method["security"] = [{"BearerAuth": []}]
+    # Apply security to protected routes only
+    for path, path_item in openapi_schema["paths"].items():
+        for method, operation in path_item.items():
+            if method in ["get", "post", "put", "delete", "patch"]:
+                # Skip public routes
+                if not any(path.startswith(public) for public in ["/", "/docs", "/redoc", "/openapi.json", "/health", "/api/auth/register", "/api/auth/login"]):
+                    operation["security"] = [{"BearerAuth": []}]
+    
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
