@@ -5,31 +5,35 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.schemas import UserCreate, UserOut, UserLogin, Token
 from app.config import settings
-from supabase import create_client, Client
+import requests
+import json
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 security = HTTPBearer()
 
-def get_supabase_client():
-    """Get Supabase client - Lazy initialization"""
-    try:
-        return create_client(settings.SUPABASE_URL, settings.SUPABASE_ANON_KEY)
-    except Exception as e:
-        print(f"❌ Error creating Supabase client: {e}")
-        raise HTTPException(status_code=500, detail="Database connection failed")
+def get_supabase_auth_url():
+    """Get Supabase auth URL"""
+    return f"{settings.SUPABASE_URL}/auth/v1"
 
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Get current user - Simple version"""
     try:
         token = credentials.credentials
-        supabase_client = get_supabase_client()
-        response = supabase_client.auth.get_user(token)
+        auth_url = get_supabase_auth_url()
+        headers = {
+            "apikey": settings.SUPABASE_ANON_KEY,
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json"
+        }
         
-        if not response.user:
+        response = requests.get(f"{auth_url}/user", headers=headers)
+        
+        if response.status_code == 200:
+            user_data = response.json()
+            return user_data
+        else:
             raise HTTPException(status_code=401, detail="Token invalide")
-        
-        return response.user
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Erreur: {str(e)}")
 
@@ -37,33 +41,48 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
 async def register(user: UserCreate):
     """Register - Simple version"""
     try:
-        supabase_client = get_supabase_client()
-        response = supabase_client.auth.sign_up({
+        auth_url = get_supabase_auth_url()
+        headers = {
+            "apikey": settings.SUPABASE_ANON_KEY,
+            "Content-Type": "application/json"
+        }
+        
+        data = {
             "email": user.email,
             "password": user.password,
-            "options": {
-                "data": {
-                    "full_name": user.full_name,
-                    "phone": user.phone,
-                    "address": user.address
-                }
+            "data": {
+                "full_name": user.full_name,
+                "phone": user.phone,
+                "address": user.address
             }
-        })
+        }
         
-        if response.user:
+        response = requests.post(f"{auth_url}/signup", headers=headers, json=data)
+        
+        if response.status_code == 200:
+            user_data = response.json()
+            print(f"🔍 Debug: Supabase response: {user_data}")
+            
+            # Handle different response structures
+            if "user" in user_data:
+                user_info = user_data["user"]
+            else:
+                user_info = user_data
+                
             return UserOut(
-                id=response.user.id,
-                email=response.user.email,
+                id=user_info.get("id", "unknown"),
+                email=user_info.get("email", user.email),
                 full_name=user.full_name,
                 phone=user.phone,
                 address=user.address,
                 is_active=True,
                 is_verified=False,
-                created_at=response.user.created_at,
-                updated_at=response.user.updated_at
+                created_at=user_info.get("created_at", "2024-01-01T00:00:00Z"),
+                updated_at=user_info.get("updated_at", "2024-01-01T00:00:00Z")
             )
         else:
-            raise HTTPException(status_code=400, detail="Erreur d'inscription")
+            print(f"❌ Supabase error: {response.status_code} - {response.text}")
+            raise HTTPException(status_code=400, detail=f"Erreur d'inscription: {response.text}")
             
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Erreur: {str(e)}")
@@ -72,15 +91,23 @@ async def register(user: UserCreate):
 async def login(user: UserLogin):
     """Login - Simple version"""
     try:
-        supabase_client = get_supabase_client()
-        response = supabase_client.auth.sign_in_with_password({
+        auth_url = get_supabase_auth_url()
+        headers = {
+            "apikey": settings.SUPABASE_ANON_KEY,
+            "Content-Type": "application/json"
+        }
+        
+        data = {
             "email": user.email,
             "password": user.password
-        })
+        }
         
-        if response.user and response.session:
+        response = requests.post(f"{auth_url}/token?grant_type=password", headers=headers, json=data)
+        
+        if response.status_code == 200:
+            session_data = response.json()
             return Token(
-                access_token=response.session.access_token,
+                access_token=session_data["access_token"],
                 token_type="bearer"
             )
         else:
