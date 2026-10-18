@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import { isAdmin } from "../lib/auth";
+import { addToCart } from "../lib/cart";
+import { Star } from "lucide-react";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -13,6 +16,7 @@ export default function ProductDetail() {
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviewError, setReviewError] = useState("");
   const [reviewSuccess, setReviewSuccess] = useState("");
+  const [addingToCart, setAddingToCart] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -29,6 +33,19 @@ export default function ProductDetail() {
       .then(res => res.json())
       .then(setReviews);
   }, [id, reviewSuccess]);
+
+  const handleAddToCart = async () => {
+    if (!product) return;
+    setAddingToCart(true);
+    try {
+      await addToCart(product.id);
+      alert("Added to cart ✅");
+    } catch (err) {
+      alert("Error adding to cart ❌");
+    } finally {
+      setAddingToCart(false);
+    }
+  };
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,81 +78,128 @@ export default function ProductDetail() {
   };
 
   if (loading) return <div className="py-12 text-center">Loading...</div>;
-  if (!product) return <div className="py-12 text-center text-red-500">Product not found.</div>;
+  if (!product) return <div className="py-12 text-center text-destructive">Product not found.</div>;
 
   const avgRating = reviews.length ? (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1) : null;
 
   return (
-    <div className="max-w-3xl mx-auto py-12 px-4">
-      <Link to="/products" className="text-pink-600 hover:underline mb-4 inline-block">← Back to Products</Link>
-      <div className="flex flex-col md:flex-row gap-8 mb-8">
-        <img src={product.image_url || "/vite.svg"} alt={product.name} className="w-full md:w-80 h-80 object-cover rounded-xl shadow" />
-        <div className="flex-1 flex flex-col justify-center">
-          <h1 className="text-3xl font-extrabold text-pink-600 mb-2">{product.name}</h1>
-          <p className="text-gray-700 mb-4">{product.description}</p>
-          <p className="text-2xl font-bold mb-2">{product.price} €</p>
-          {avgRating && (
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-yellow-400 text-2xl font-bold">★ {avgRating}</span>
-              <span className="text-gray-500 text-sm">({reviews.length} review{reviews.length > 1 ? "s" : ""})</span>
-            </div>
+    <div className="max-w-6xl mx-auto px-6 py-12">
+      <Link to="/products" className="text-foreground/50 hover:text-foreground mb-6 inline-block">
+        ← Back to Products
+      </Link>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div className="w-full aspect-square bg-muted rounded-lg overflow-hidden">
+          <img
+            src={product.image_url || "/vite.svg"}
+            alt={product.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="flex flex-col justify-center gap-6">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">{product.name}</h1>
+            <p className="text-muted-foreground text-lg mb-4">{product.description}</p>
+            <p className="text-3xl font-bold mb-4">{product.price} €</p>
+            {avgRating && (
+              <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-5 h-5 ${
+                        i < Math.round(Number(avgRating))
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-foreground/50 text-sm">
+                  {avgRating} ({reviews.length} review{reviews.length !== 1 ? "s" : ""})
+                </span>
+              </div>
+            )}
+          </div>
+          {!isAdmin() && (
+            <Button
+              onClick={handleAddToCart}
+              disabled={addingToCart}
+              size="lg"
+              className="w-full md:w-auto"
+            >
+              {addingToCart ? "Adding..." : "Add to Cart"}
+            </Button>
           )}
         </div>
       </div>
+
       {/* Reviews section */}
-      <div className="mb-10">
-        <h2 className="text-2xl font-bold text-pink-500 mb-6">Reviews</h2>
+      <div className="border-t border-border pt-12">
+        <h2 className="text-2xl font-bold mb-8">Reviews</h2>
         {reviews.length === 0 ? (
-          <p className="text-gray-500 mb-4">No reviews yet. Be the first to review this product!</p>
+          <p className="text-muted-foreground mb-8">No reviews yet. Be the first to review this product!</p>
         ) : (
-          <div className="space-y-6 mb-8">
+          <div className="space-y-6 mb-12">
             {reviews.map(r => (
-              <div key={r.id} className="bg-white rounded-2xl shadow p-5 flex gap-4 items-start">
-                {/* Avatar/Initial */}
-                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold text-xl shadow">
+              <div key={r.id} className="bg-card rounded-lg p-6 flex gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
                   {r.user_email ? r.user_email[0].toUpperCase() : "U"}
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-yellow-400 text-lg">{"★".repeat(r.rating)}<span className="text-gray-300">{"★".repeat(5 - r.rating)}</span></span>
-                    <span className="text-gray-700 font-semibold">{r.user_email || "User"}</span>
-                    <span className="text-gray-400 text-xs ml-2">{new Date(r.created_at).toLocaleDateString('fr-FR')}</span>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 ${
+                            i < r.rating
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="font-semibold">{r.user_email || "User"}</span>
+                    <span className="text-muted-foreground text-xs">
+                      {new Date(r.created_at).toLocaleDateString('en-US')}
+                    </span>
                   </div>
-                  <div className="text-gray-700 text-base">{r.comment}</div>
+                  <p className="text-foreground">{r.comment}</p>
                 </div>
               </div>
             ))}
           </div>
         )}
+
         {/* Review form (only if not admin) */}
         {!isAdmin() && (
-          <form onSubmit={handleReviewSubmit} className="bg-pink-50 rounded-2xl shadow p-8 space-y-4 border border-pink-100">
-            <h3 className="text-lg font-bold text-pink-600 mb-2">Leave a Review</h3>
-            {reviewError && <div className="text-red-600 font-semibold">{reviewError}</div>}
+          <form onSubmit={handleReviewSubmit} className="bg-card rounded-lg p-8 space-y-4 border border-border">
+            <h3 className="text-lg font-bold mb-4">Leave a Review</h3>
+            {reviewError && <div className="text-destructive font-semibold">{reviewError}</div>}
             {reviewSuccess && <div className="text-green-600 font-semibold">{reviewSuccess}</div>}
             <div>
-              <label className="block text-gray-700 mb-1">Rating</label>
+              <label className="block text-sm font-medium mb-2">Rating</label>
               <select
                 value={reviewRating}
                 onChange={e => setReviewRating(Number(e.target.value))}
-                className="w-24 px-3 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-200 text-lg shadow"
+                className="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-background"
                 required
               >
-                {[5,4,3,2,1].map(n => <option key={n} value={n}>{n} ★</option>)}
+                {[5,4,3,2,1].map(n => <option key={n} value={n}>{n} stars</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 mb-1">Comment</label>
+              <label className="block text-sm font-medium mb-2">Comment</label>
               <textarea
                 value={reviewText}
                 onChange={e => setReviewText(e.target.value)}
-                className="w-full border rounded px-3 py-2"
-                rows={3}
+                className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+                rows={4}
                 placeholder="Share your experience..."
                 required
               />
             </div>
-            <Button type="submit" className="bg-pink-500 hover:bg-pink-600 text-white font-bold px-8 py-2 rounded-full transition" disabled={reviewLoading}>
+            <Button type="submit" disabled={reviewLoading}>
               {reviewLoading ? "Submitting..." : "Submit Review"}
             </Button>
           </form>
@@ -143,4 +207,4 @@ export default function ProductDetail() {
       </div>
     </div>
   );
-} 
+}

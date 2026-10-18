@@ -26,19 +26,34 @@ const articles = [
 
 export default function Blog() {
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4">
-      <h1 className="text-4xl font-extrabold text-pink-600 mb-8">Blog & News</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="max-w-4xl mx-auto px-6 py-12">
+      <h1 className="text-3xl md:text-4xl font-bold mb-4">Blog & News</h1>
+      <p className="text-lg text-muted-foreground mb-12">
+        Stay updated with the latest news, tips, and insights from FlexiShop.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {articles.map(article => (
-          <div key={article.id} className="bg-white rounded-xl shadow p-6 flex flex-col">
-            <img src={article.image} alt={article.title} className="w-full h-48 object-cover rounded mb-4" />
-            <h2 className="text-2xl font-bold text-pink-500 mb-2">{article.title}</h2>
-            <p className="text-gray-500 text-sm mb-2">{new Date(article.date).toLocaleDateString('fr-FR')}</p>
-            <p className="text-gray-700 mb-4 flex-1">{article.summary}</p>
-            <Link to={`/blog/${article.id}`} className="mt-auto text-pink-600 hover:underline font-semibold">Read more</Link>
-          </div>
+          <Link
+            key={article.id}
+            to={`/blog/${article.id}`}
+            className="bg-card border border-border rounded-lg overflow-hidden hover:bg-accent/50 transition-colors"
+          >
+            <img
+              src={article.image}
+              alt={article.title}
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-6">
+              <p className="text-muted-foreground text-sm mb-2">
+                {new Date(article.date).toLocaleDateString('en-US')}
+              </p>
+              <h2 className="text-xl font-bold mb-2">{article.title}</h2>
+              <p className="text-muted-foreground mb-4">{article.summary}</p>
+              <span className="text-primary hover:underline font-semibold text-sm">Read more →</span>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
   );
-} 
+}

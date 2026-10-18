@@ -56,7 +56,7 @@ class ProductCreate(BaseModel):
     image_url: Optional[str] = None
 
 class ProductOut(BaseModel):
-    id: str
+    id: int
     name: str
     description: str
     price: float

@@ -1,164 +1,208 @@
 import { Link, useLocation } from "react-router-dom"
-import { ShoppingCart, User, ShoppingBag, Menu, X } from "lucide-react"
-import { useState } from "react"
+import { ShoppingCart, User, Menu, X } from "lucide-react"
+import { useState, useEffect } from "react"
+import { useCartCount } from "../hooks/useCartCount"
+import { Button } from "./ui/button"
 
-function Footer() {
+function LogoSvg({ className }: { className?: string }) {
   return (
-    <footer className="w-full bg-black text-white pt-8 sm:pt-12 pb-4 sm:pb-6 border-t border-zinc-800 mt-8 sm:mt-12">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row flex-wrap justify-between gap-8 sm:gap-12 px-4 sm:px-6">
-        {/* FlexiShop / About */}
-        <div className="flex-1 min-w-[200px] mb-6 sm:mb-8 md:mb-0">
-          <Link to="/" className="flex items-center gap-2 text-xl sm:text-2xl font-extrabold text-white mb-2 hover:text-pink-400 transition-colors duration-200">
-            <span role="img" aria-label="bag">🛍️</span> FlexiShop
-          </Link>
-          <p className="text-zinc-300 text-xs sm:text-sm mt-2">Your trusted shop for tech, fashion, and more. Fast delivery, secure payment, 24/7 support.</p>
-        </div>
-        {/* Entreprise */}
-        <div className="flex-1 min-w-[150px] sm:min-w-[180px] mb-6 sm:mb-8 md:mb-0">
-          <h4 className="font-bold text-base sm:text-lg mb-2 sm:mb-3">Entreprise</h4>
-          <ul className="space-y-1 sm:space-y-2">
-            <li><Link to="/about" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">About Us</Link></li>
-            <li><Link to="/careers" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">Careers</Link></li>
-            <li><Link to="/partner" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">Partners</Link></li>
-            <li><Link to="/blog" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">Blog</Link></li>
-          </ul>
-        </div>
-        {/* Help */}
-        <div className="flex-1 min-w-[150px] sm:min-w-[180px] mb-6 sm:mb-8 md:mb-0">
-          <h4 className="font-bold text-base sm:text-lg mb-2 sm:mb-3">Help</h4>
-          <ul className="space-y-1 sm:space-y-2">
-            <li><Link to="/contact-us" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">Contact Us</Link></li>
-            <li><Link to="/account-management" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">Account Management</Link></li>
-            <li><Link to="/cancel-order" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">Order Canceling</Link></li>
-            <li><Link to="/faq" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">FAQ</Link></li>
-            <li><Link to="/support" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">Support Center</Link></li>
-            <li><Link to="/favorites" className="text-pink-400 hover:text-white hover:underline transition-colors duration-200 text-sm sm:text-base">My Favorites</Link></li>
-          </ul>
-        </div>
-        {/* Contact */}
-        <div className="flex-1 min-w-[150px] sm:min-w-[180px]">
-          <h4 className="font-bold text-base sm:text-lg mb-2 sm:mb-3">Contact</h4>
-          <p className="text-zinc-200 text-xs sm:text-sm mb-1">contact@flexishop.com</p>
-          <p className="text-zinc-200 text-xs sm:text-sm mb-3 sm:mb-4">+1 555 123 4567</p>
-          <div className="flex gap-3 sm:gap-4 mt-2">
-            <a href="#" className="text-pink-400 hover:text-white text-lg sm:text-xl" title="Twitter" aria-label="Twitter">🐦</a>
-            <a href="#" className="text-pink-400 hover:text-white text-lg sm:text-xl" title="Instagram" aria-label="Instagram">📸</a>
-            <a href="#" className="text-pink-400 hover:text-white text-lg sm:text-xl" title="Facebook" aria-label="Facebook">📘</a>
-            <a href="#" className="text-pink-400 hover:text-white text-lg sm:text-xl" title="LinkedIn" aria-label="LinkedIn">💼</a>
-          </div>
-        </div>
-      </div>
-      <div className="mt-8 sm:mt-10 text-center text-zinc-400 text-xs border-t border-zinc-800 pt-3 sm:pt-4 px-4">
-        &copy; {new Date().getFullYear()} FlexiShop. All rights reserved.
-      </div>
-    </footer>
-  );
+    <div className={`font-bold text-2xl tracking-tight ${className}`}>
+      FlexiShop
+    </div>
+  )
 }
+
+const navItems = [
+  {
+    label: "home",
+    href: "/",
+  },
+  {
+    label: "products",
+    href: "/products",
+  },
+  {
+    label: "shop all",
+    href: "/products",
+  },
+]
 
 export default function Navbar() {
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const cartCount = useCartCount()
 
   const isActive = (path: string) => location.pathname === path
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const openMobileMenu = () => setIsMenuOpen(true)
+  const closeMobileMenu = () => setIsMenuOpen(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setIsMenuOpen(false)
+      }
+    }
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    closeMobileMenu()
+  }, [location.pathname])
 
   return (
-    <nav className="bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-900 shadow-lg border-b border-border sticky top-0 z-50">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 text-xl font-extrabold text-white tracking-wide hover:text-pink-400 transition-colors duration-200">
-            <ShoppingBag className="w-7 h-7 text-pink-400" />
-            <span className="hidden sm:inline">FlexiShop</span>
-            <span className="sm:hidden">FS</span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link
-              to="/products"
-              className={`text-sm font-semibold transition-colors duration-200 px-3 py-1 rounded hover:text-pink-400 ${
-                isActive("/products") ? "text-pink-400" : "text-white"
-              }`}
-            >
-              Products
-            </Link>
-
-            <Link
-              to="/cart"
-              className={`flex items-center gap-1 text-sm font-semibold transition-colors duration-200 px-3 py-1 rounded hover:text-pink-400 ${
-                isActive("/cart") ? "text-pink-400" : "text-white"
-              }`}
-            >
-              <ShoppingCart className="w-4 h-4" />
-              Cart
-            </Link>
-
-            <Link
-              to="/login"
-              className={`flex items-center gap-1 text-sm font-semibold transition-colors duration-200 px-3 py-1 rounded hover:text-pink-400 ${
-                isActive("/login") ? "text-pink-400" : "text-white"
-              }`}
-            >
-              <User className="w-4 h-4" />
-              Login
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden flex items-center p-2 text-white hover:text-pink-400 transition-colors duration-200"
-            aria-label="Toggle menu"
+    <>
+      <header className="fixed top-0 left-0 w-full p-sides grid grid-cols-3 md:grid-cols-12 md:gap-sides z-50 items-start bg-background/80 backdrop-blur-md">
+        <div className="block flex-none md:hidden">
+          <Button
+            onClick={openMobileMenu}
+            aria-label="Open mobile menu"
+            variant="secondary"
+            size="sm"
+            className="md:hidden uppercase"
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            Menu
+          </Button>
         </div>
+        <Link to="/" className="md:col-span-2">
+          <LogoSvg className="h-6 w-auto max-md:place-self-center md:size-full md:max-w-[400px]" />
+        </Link>
+        <nav className="flex items-center md:col-span-10 justify-end gap-2">
+          <ul className="items-center gap-5 py-0.5 px-3 bg-background/10 rounded-sm backdrop-blur-md hidden md:flex">
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <Link
+                  to={item.href}
+                  className={`font-semibold text-base transition-colors duration-200 uppercase ${
+                    isActive(item.href) ? "text-foreground" : "text-foreground/50"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link
+            to="/login"
+            className="hidden md:inline-flex items-center px-3 py-2 text-sm font-semibold text-foreground/50 hover:text-foreground transition-colors"
+          >
+            Login
+          </Link>
+          <Link to="/cart">
+            <Button
+              aria-label="Open cart"
+              className="uppercase"
+              size="sm"
+            >
+              <span className="max-md:hidden">cart</span> ({cartCount || 0})
+            </Button>
+          </Link>
+        </nav>
+      </header>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-zinc-800 border-t border-zinc-700">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link
-                to="/products"
-                onClick={() => setIsMenuOpen(false)}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                  isActive("/products") ? "text-pink-400 bg-zinc-700" : "text-white hover:text-pink-400 hover:bg-zinc-700"
-                }`}
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-foreground/30 z-50"
+            onClick={closeMobileMenu}
+            aria-hidden="true"
+          />
+          <div className="fixed top-0 bottom-0 left-0 flex w-full md:w-[400px] p-modal-sides z-50">
+            <div className="flex flex-col bg-muted p-3 md:p-4 rounded w-full">
+              <div className="pl-2 flex items-baseline justify-between mb-10">
+                <p className="text-2xl font-semibold">Menu</p>
+                <Button size="sm" variant="ghost" aria-label="Close menu" onClick={closeMobileMenu}>
+                  Close
+                </Button>
+              </div>
+
+              <nav className="grid grid-cols-2 gap-x-6 gap-y-4 mb-10">
+                {navItems.map((item) => (
+                  <Button
+                    key={item.href}
+                    size="sm"
+                    variant="secondary"
+                    onClick={closeMobileMenu}
+                    className="uppercase bg-background/50 justify-start"
+                    asChild
+                  >
+                    <Link to={item.href}>
+                      {item.label}
+                    </Link>
+                  </Button>
+                ))}
+              </nav>
+
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={closeMobileMenu}
+                className="uppercase bg-background/50 justify-start mb-6"
+                asChild
               >
-                Products
-              </Link>
-              <Link
-                to="/cart"
-                onClick={() => setIsMenuOpen(false)}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                  isActive("/cart") ? "text-pink-400 bg-zinc-700" : "text-white hover:text-pink-400 hover:bg-zinc-700"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <ShoppingCart className="w-4 h-4" />
-                  Cart
-                </div>
-              </Link>
-              <Link
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                  isActive("/login") ? "text-pink-400 bg-zinc-700" : "text-white hover:text-pink-400 hover:bg-zinc-700"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <User className="w-4 h-4" />
+                <Link to="/login">
                   Login
-                </div>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
-        )}
-      </div>
-    </nav>
+        </>
+      )}
+    </>
   )
 }
 
-export { Footer };
+function Footer() {
+  return (
+    <footer className="p-sides">
+      <div className="w-full min-h-[532px] p-11 text-background bg-foreground rounded-[12px] flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div className="md:col-span-2">
+            <LogoSvg className="max-w-[400px] h-auto block mb-4" />
+            <p className="text-muted-foreground text-sm max-w-md">
+              Your trusted shop for tech, fashion, and more. Fast delivery, secure payment, 24/7 support.
+            </p>
+          </div>
+          
+          {/* Entreprise */}
+          <div>
+            <h4 className="font-bold text-lg mb-4">Entreprise</h4>
+            <ul className="space-y-2">
+              <li><Link to="/about" className="text-muted-foreground hover:text-background transition-colors text-sm">About Us</Link></li>
+              <li><Link to="/careers" className="text-muted-foreground hover:text-background transition-colors text-sm">Careers</Link></li>
+              <li><Link to="/partner" className="text-muted-foreground hover:text-background transition-colors text-sm">Partners</Link></li>
+              <li><Link to="/blog" className="text-muted-foreground hover:text-background transition-colors text-sm">Blog</Link></li>
+            </ul>
+          </div>
+
+          {/* Help */}
+          <div>
+            <h4 className="font-bold text-lg mb-4">Help</h4>
+            <ul className="space-y-2">
+              <li><Link to="/contact-us" className="text-muted-foreground hover:text-background transition-colors text-sm">Contact Us</Link></li>
+              <li><Link to="/account-management" className="text-muted-foreground hover:text-background transition-colors text-sm">Account Management</Link></li>
+              <li><Link to="/cancel-order" className="text-muted-foreground hover:text-background transition-colors text-sm">Order Canceling</Link></li>
+              <li><Link to="/faq" className="text-muted-foreground hover:text-background transition-colors text-sm">FAQ</Link></li>
+              <li><Link to="/support" className="text-muted-foreground hover:text-background transition-colors text-sm">Support Center</Link></li>
+              <li><Link to="/favorites" className="text-muted-foreground hover:text-background transition-colors text-sm">My Favorites</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-border/20">
+          <div className="flex flex-col md:flex-row gap-4 mb-4 md:mb-0">
+            <p className="text-muted-foreground text-sm">contact@flexishop.com</p>
+            <p className="text-muted-foreground text-sm">+1 555 123 4567</p>
+          </div>
+          <p className="text-muted-foreground text-sm">
+            {new Date().getFullYear()}© — All rights reserved
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+export { Footer }

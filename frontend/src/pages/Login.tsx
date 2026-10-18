@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Input } from "../components/ui/input"
 import { Button } from "../components/ui/button"
+import type React from "react"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -40,6 +41,7 @@ export default function LoginPage() {
         }
         localStorage.setItem("token", data.access_token)
         alert("Logged in ✅")
+        window.location.href = "/"
         setLoading(false)
       })
       .catch(() => {
@@ -83,78 +85,75 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen pt-24">
-      <div className="w-full max-w-md bg-white border border-gray-200 rounded-3xl shadow-2xl p-8 space-y-8">
+    <div className="flex items-center justify-center min-h-screen pt-top-spacing">
+      <div className="w-full max-w-md bg-card border border-border rounded-lg shadow-lg p-8 space-y-6">
         {showSignup ? (
           <>
-            <h1 className="text-3xl font-extrabold text-blue-600 text-center mb-2">Sign up</h1>
-            <p className="text-center text-gray-500 mb-6">Create your account to start shopping on FlexiShop.</p>
-            <form className="space-y-6" onSubmit={handleSignup}>
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-2">Sign up</h1>
+              <p className="text-muted-foreground">Create your account to start shopping on FlexiShop.</p>
+            </div>
+            <form className="space-y-4" onSubmit={handleSignup}>
               <div>
-                <label className="block text-base font-medium mb-2 text-gray-700">Full Name</label>
+                <label className="block text-sm font-medium mb-2">Full Name</label>
                 <Input
                   type="text"
                   placeholder="John Doe"
                   value={signupFullName}
                   onChange={(e) => setSignupFullName(e.target.value)}
                   required
-                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-base font-medium mb-2 text-gray-700">Email</label>
+                <label className="block text-sm font-medium mb-2">Email</label>
                 <Input
                   type="email"
                   placeholder="you@example.com"
                   value={signupEmail}
                   onChange={(e) => setSignupEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-base font-medium mb-2 text-gray-700">Phone</label>
+                <label className="block text-sm font-medium mb-2">Phone</label>
                 <Input
                   type="tel"
                   placeholder="+1234567890"
                   value={signupPhone}
                   onChange={(e) => setSignupPhone(e.target.value)}
                   required
-                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-base font-medium mb-2 text-gray-700">Address</label>
+                <label className="block text-sm font-medium mb-2">Address</label>
                 <Input
                   type="text"
                   placeholder="123 Main Street, City"
                   value={signupAddress}
                   onChange={(e) => setSignupAddress(e.target.value)}
                   required
-                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-base font-medium mb-2 text-gray-700">Password</label>
+                <label className="block text-sm font-medium mb-2">Password</label>
                 <Input
                   type="password"
                   placeholder="••••••••"
                   value={signupPassword}
                   onChange={(e) => setSignupPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
                 />
               </div>
-              <Button type="submit" className="w-full mt-4 text-lg py-3" disabled={signupLoading}>
+              <Button type="submit" className="w-full" disabled={signupLoading}>
                 {signupLoading ? "Signing up..." : "Sign up"}
               </Button>
-              {signupSuccess && <p className="text-green-600 text-center mt-2">{signupSuccess}</p>}
-              {signupError && <p className="text-red-600 text-center mt-2">{signupError}</p>}
+              {signupSuccess && <p className="text-green-600 text-center text-sm">{signupSuccess}</p>}
+              {signupError && <p className="text-destructive text-center text-sm">{signupError}</p>}
             </form>
-            <div className="text-center mt-4">
-              <span className="text-gray-600">Already have an account? </span>
+            <div className="text-center">
+              <span className="text-muted-foreground">Already have an account? </span>
               <button
-                className="text-blue-600 hover:underline font-semibold"
+                className="text-primary hover:underline font-semibold"
                 onClick={() => setShowSignup(false)}
                 type="button"
               >
@@ -164,39 +163,39 @@ export default function LoginPage() {
           </>
         ) : (
           <>
-            <h1 className="text-3xl font-extrabold text-blue-600 text-center mb-2">Login</h1>
-            <p className="text-center text-gray-500 mb-6">Welcome to FlexiShop! Log in to access your account.</p>
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-2">Login</h1>
+              <p className="text-muted-foreground">Welcome to FlexiShop! Log in to access your account.</p>
+            </div>
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-base font-medium mb-2 text-gray-700">Email</label>
+                <label className="block text-sm font-medium mb-2">Email</label>
                 <Input
                   type="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-base font-medium mb-2 text-gray-700">Password</label>
+                <label className="block text-sm font-medium mb-2">Password</label>
                 <Input
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-full focus:border-blue-400 focus:outline-none"
                 />
               </div>
-              <Button type="submit" className="w-full mt-4 text-lg py-3" disabled={loading}>
+              <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Logging in..." : "Log in"}
               </Button>
             </form>
-            <div className="text-center mt-4">
-              <span className="text-gray-600">Don't have an account? </span>
+            <div className="text-center">
+              <span className="text-muted-foreground">Don't have an account? </span>
               <button
-                className="text-blue-600 hover:underline font-semibold"
+                className="text-primary hover:underline font-semibold"
                 onClick={() => setShowSignup(true)}
                 type="button"
               >

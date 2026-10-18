@@ -1,41 +1,63 @@
 import { useState } from "react";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Link } from "react-router-dom";
+import type React from "react";
 
 export default function CancelOrder() {
   const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ orderNumber: "", reason: "" });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setFormData({ orderNumber: "", reason: "" });
+    setTimeout(() => setSubmitted(false), 3000);
+  };
 
   return (
-    <div className="max-w-2xl mx-auto py-12 px-4">
-      <h1 className="text-4xl font-extrabold text-pink-600 mb-6">Order Canceling</h1>
-      <p className="text-lg text-gray-700 mb-8">
+    <div className="max-w-2xl mx-auto px-6 py-12">
+      <h1 className="text-3xl md:text-4xl font-bold mb-4">Order Canceling</h1>
+      <p className="text-lg text-muted-foreground mb-12">
         Need to cancel an order? Fill out the form below and our team will process your request as soon as possible. Please note: Orders can only be canceled before they are shipped.
       </p>
-      <div className="bg-white rounded-xl shadow p-8">
-        <h2 className="text-xl font-bold text-pink-500 mb-4">Cancel an Order</h2>
+
+      <div className="bg-card border border-border rounded-lg p-8">
+        <h2 className="text-xl font-bold mb-6">Cancel an Order</h2>
         {submitted ? (
-          <div className="text-green-600 font-semibold text-center py-8">Your cancellation request has been received. We’ll contact you soon.</div>
+          <div className="text-center py-8">
+            <p className="text-green-600 font-semibold">Your cancellation request has been received. We'll contact you soon.</p>
+          </div>
         ) : (
-          <form
-            className="space-y-6"
-            onSubmit={e => {
-              e.preventDefault();
-              setSubmitted(true);
-            }}
-          >
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-gray-700 mb-1">Order Number</label>
-              <input type="text" className="w-full border rounded px-3 py-2" required />
+              <label className="block text-sm font-medium mb-2">Order Number</label>
+              <Input
+                type="text"
+                value={formData.orderNumber}
+                onChange={(e) => setFormData({ ...formData, orderNumber: e.target.value })}
+                required
+              />
             </div>
             <div>
-              <label className="block text-gray-700 mb-1">Reason for Cancellation</label>
-              <textarea className="w-full border rounded px-3 py-2" rows={3} required></textarea>
+              <label className="block text-sm font-medium mb-2">Reason for Cancellation</label>
+              <textarea
+                value={formData.reason}
+                onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-background min-h-[120px]"
+                required
+              />
             </div>
-            <button type="submit" className="bg-pink-500 hover:bg-pink-600 text-white font-bold px-8 py-2 rounded-full transition">Submit Request</button>
+            <Button type="submit" className="w-full">
+              Submit Request
+            </Button>
           </form>
         )}
       </div>
-      <div className="mt-8 text-gray-600 text-sm">
-        <strong>Note:</strong> If your order has already shipped, please use our <a href="/contact-us" className="text-pink-600 hover:underline">Contact Us</a> page for further assistance.
+
+      <div className="mt-8 text-muted-foreground text-sm">
+        <strong>Note:</strong> If your order has already shipped, please use our <Link to="/contact-us" className="text-primary hover:underline">Contact Us</Link> page for further assistance.
       </div>
     </div>
   );
-} 
+}

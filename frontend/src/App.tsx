@@ -21,9 +21,10 @@ import CancelPage from "./pages/Cancel";
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#f6e9f7] flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <BrowserRouter>
         <Navbar/>
+        <div className="pt-top-spacing">
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Home />} />
@@ -44,6 +45,7 @@ function App() {
           <Route path="/success" element={<SuccessPage />} />
           <Route path="/cancel" element={<CancelPage />} />
         </Routes>
+        </div>
         <Footer />
       </BrowserRouter>
     </div>

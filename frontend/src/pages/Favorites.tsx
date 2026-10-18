@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
+import { Heart } from "lucide-react";
 
 function getWishlist(): number[] {
   try {
@@ -30,14 +31,18 @@ export default function Favorites() {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto py-12 px-4">
-      <h1 className="text-4xl font-extrabold text-pink-600 mb-8">My Favorites</h1>
+    <div className="max-w-6xl mx-auto px-6 py-12">
+      <h1 className="text-3xl md:text-4xl font-bold mb-8">My Favorites</h1>
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-muted-foreground">Loading...</p>
       ) : products.length === 0 ? (
-        <p className="text-gray-500 text-lg">You have no favorite products yet. Click the ♥ on a product to add it to your favorites!</p>
+        <div className="text-center py-12">
+          <Heart className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+          <p className="text-muted-foreground text-lg mb-2">You have no favorite products yet.</p>
+          <p className="text-muted-foreground">Click the ♥ on a product to add it to your favorites!</p>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map(product => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -45,4 +50,4 @@ export default function Favorites() {
       )}
     </div>
   );
-} 
+}

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
     question: "How do I place an order?",
-    answer: "Browse our products, add items to your cart, and proceed to checkout. You’ll need to create an account or log in to complete your purchase."
+    answer: "Browse our products, add items to your cart, and proceed to checkout. You'll need to create an account or log in to complete your purchase."
   },
   {
     question: "What payment methods do you accept?",
@@ -12,7 +13,7 @@ const faqs = [
   },
   {
     question: "How can I track my order?",
-    answer: "After your order ships, you’ll receive a tracking link by email. You can also view your order status in your account’s Order History section."
+    answer: "After your order ships, you'll receive a tracking link by email. You can also view your order status in your account's Order History section."
   },
   {
     question: "Can I return or exchange a product?",
@@ -32,7 +33,7 @@ const faqs = [
   },
   {
     question: "How do I cancel my order?",
-    answer: "If your order hasn’t shipped yet, you can request a cancellation from the Order Canceling page or by contacting support."
+    answer: "If your order hasn't shipped yet, you can request a cancellation from the Order Canceling page or by contacting support."
   },
 ];
 
@@ -40,30 +41,32 @@ export default function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <div className="max-w-3xl mx-auto py-12 px-4">
-      <h1 className="text-4xl font-extrabold text-pink-600 mb-6">Frequently Asked Questions</h1>
-      <p className="text-lg text-gray-700 mb-8">
-        Find answers to the most common questions about shopping, orders, returns, and your account. If you can’t find what you’re looking for, our support team is here to help!
+    <div className="max-w-4xl mx-auto px-6 py-12">
+      <h1 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h1>
+      <p className="text-muted-foreground text-lg mb-12">
+        Find answers to the most common questions about shopping, orders, returns, and your account. If you can't find what you're looking for, our support team is here to help!
       </p>
-      <div className="mb-10">
-        <div className="space-y-4">
-          {faqs.map((faq, idx) => (
-            <div key={idx} className="bg-white rounded-xl shadow p-5">
-              <button
-                className="w-full text-left font-semibold text-pink-600 focus:outline-none flex justify-between items-center"
-                onClick={() => setOpen(open === idx ? null : idx)}
-              >
-                {faq.question}
-                <span>{open === idx ? "−" : "+"}</span>
-              </button>
-              {open === idx && <div className="mt-2 text-gray-700 text-sm">{faq.answer}</div>}
-            </div>
-          ))}
-        </div>
+      <div className="space-y-4">
+        {faqs.map((faq, idx) => (
+          <div key={idx} className="bg-card border border-border rounded-lg overflow-hidden">
+            <button
+              className="w-full text-left font-semibold p-6 focus:outline-none flex justify-between items-center hover:bg-accent/50 transition-colors"
+              onClick={() => setOpen(open === idx ? null : idx)}
+            >
+              <span>{faq.question}</span>
+              <ChevronDown className={`w-5 h-5 transition-transform ${open === idx ? "rotate-180" : ""}`} />
+            </button>
+            {open === idx && (
+              <div className="px-6 pb-6 text-muted-foreground">
+                {faq.answer}
+              </div>
+            )}
+          </div>
+        ))}
       </div>
-      <div className="text-center text-gray-500 text-sm">
-        Still need help? <Link to="/contact-us" className="text-pink-600 hover:underline">Contact our support team</Link>.
+      <div className="text-center mt-12 text-muted-foreground">
+        Still need help? <Link to="/contact-us" className="text-primary hover:underline font-semibold">Contact our support team</Link>.
       </div>
     </div>
   );
-} 
+}

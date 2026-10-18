@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 interface OrderItem {
   product_id: number;
+  product_name?: string;
   quantity: number;
   price: number;
 }
@@ -42,30 +43,34 @@ export default function OrderHistory() {
   }, []);
 
   return (
-    <div className="max-w-3xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold mb-8 text-pink-500">Order History</h1>
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+    <div className="max-w-4xl mx-auto px-6 py-12">
+      <h1 className="text-3xl md:text-4xl font-bold mb-8">Order History</h1>
+      {loading && <p className="text-muted-foreground">Loading...</p>}
+      {error && <p className="text-destructive">{error}</p>}
       {!loading && !error && orders.length === 0 && (
-        <p className="text-gray-500">No orders found.</p>
+        <div className="text-center py-12">
+          <p className="text-muted-foreground text-lg">No orders found.</p>
+        </div>
       )}
-      <div className="space-y-8">
-        {orders.map(order => (
-          <div key={order.id} className="bg-white rounded-xl shadow p-6">
-            <div className="flex justify-between items-center mb-2">
-              <span className="font-semibold">Order #{order.id}</span>
-              <span className="text-gray-500 text-sm">{new Date(order.created_at).toLocaleString()}</span>
+      <div className="space-y-6">
+        {orders.map((order, idx) => (
+          <div key={order.id} className="bg-card border border-border rounded-lg p-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+              <span className="font-semibold text-lg">Order #{idx + 1}</span>
+              <span className="text-muted-foreground text-sm">
+                {new Date(order.created_at).toLocaleString('en-US')}
+              </span>
             </div>
-            <div className="mb-2">
-              <span className="font-bold">Total: </span>
-              <span>{order.total_price.toFixed(2)} €</span>
+            <div className="mb-4">
+              <span className="font-semibold">Total: </span>
+              <span className="text-lg font-bold">{order.total_price.toFixed(2)} €</span>
             </div>
             <div>
-              <span className="font-semibold">Items:</span>
-              <ul className="list-disc ml-6 mt-1">
-                {order.items.map((item, idx) => (
-                  <li key={idx} className="text-gray-700">
-                    Product #{item.product_id} — {item.quantity} × {item.price.toFixed(2)} €
+              <span className="font-semibold mb-2 block">Items:</span>
+              <ul className="list-disc ml-6 space-y-1">
+                {order.items.map((item, itemIdx) => (
+                  <li key={itemIdx} className="text-muted-foreground">
+                    {item.product_name ? item.product_name : `Product #${item.product_id}`} — {item.quantity} × {item.price.toFixed(2)} €
                   </li>
                 ))}
               </ul>
@@ -75,4 +80,4 @@ export default function OrderHistory() {
       </div>
     </div>
   );
-} 
+}
