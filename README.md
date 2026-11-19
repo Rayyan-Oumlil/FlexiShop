@@ -9,7 +9,7 @@ A modern, fullstack e-commerce platform for seamless online shopping experiences
 FlexiShop is a feature-rich e-commerce web application built with:
 - **FastAPI** (Python) for a robust backend API
 - **React + TypeScript + Vite + Tailwind CSS + ShadCN UI** for a beautiful, responsive frontend
-- **PostgreSQL** as the database
+- **Supabase (PostgreSQL)** as the database, accessed through its REST API
 - **JWT Authentication** for secure user accounts
 
 It supports user registration, product browsing, cart management, order placement, and order history. Admin features and advanced integrations are planned.
@@ -22,15 +22,14 @@ It supports user registration, product browsing, cart management, order placemen
 FlexiShop/
 ├── backend/
 │   └── app/
-│       ├── core/         # Security, dependencies
-│       ├── models/       # SQLAlchemy models
+│       ├── config.py     # Settings
 │       ├── routers/      # API endpoints (auth, products, cart, etc.)
-│       ├── schemas/      # Pydantic schemas
+│       ├── schemas.py    # Pydantic schemas
 │       ├── main.py       # FastAPI entrypoint
-│       ├── database.py   # DB connection
+│       ├── database.py   # Supabase client
+│       ├── supabase_rest.py  # REST helpers
 │       └── ...
-│   ├── create_admin.py   # Script to create admin user
-│   ├── init_db.py        # DB initialization
+│   ├── supabase_tables.sql  # Database schema
 │   └── ...
 ├── frontend/
 │   ├── src/
@@ -50,7 +49,7 @@ FlexiShop/
 ### Prerequisites
 - Python 3.10+
 - Node.js 18+
-- PostgreSQL database
+- A Supabase project (PostgreSQL); schema in `backend/supabase_tables.sql`
 
 ### Backend (FastAPI)
 ```bash
@@ -102,8 +101,8 @@ npm run dev
 | Layer     | Stack                                         |
 |-----------|-----------------------------------------------|
 | Frontend  | React, Vite, TypeScript, Tailwind, ShadCN UI  |
-| Backend   | FastAPI, SQLAlchemy, Pydantic, JWT            |
-| Database  | PostgreSQL                                    |
+| Backend   | FastAPI, Pydantic, JWT                        |
+| Database  | Supabase (PostgreSQL)                         |
 | Auth      | OAuth2 with JWT Bearer                        |
 | Payment   | Stripe (planned)                              |
 | Storage   | MinIO / S3 (planned)                          |
